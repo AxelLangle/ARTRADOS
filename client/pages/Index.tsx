@@ -39,9 +39,9 @@ export default function Index() {
           <p className="text-white text-xl font-medium text-center max-w-[800px] mb-8">
             ARTRA es un mercado en linea que conecta a artesanos talentosos con personas que buscan productos únicos y de alta calidad
           </p>
-          <button className="px-8 py-4 bg-artra-blue hover:bg-artra-dark-navy transition-colors rounded-2xl">
+          <a href="/tienda" className="px-8 py-4 bg-artra-blue hover:bg-artra-dark-navy transition-colors rounded-2xl inline-block">
             <span className="text-white text-base font-semibold">Explorar Productos</span>
-          </button>
+          </a>
         </div>
       </section>
 
