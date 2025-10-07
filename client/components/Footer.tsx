@@ -9,14 +9,14 @@ export default function Footer() {
             © 2025 ARTRA. Todos los derechos reservados
           </p>
           <div className="flex items-center gap-8">
-            <Link 
-              to="/terminos" 
+            <Link
+              to="/terminos"
               className="text-artra-lighter-blue text-base font-semibold hover:text-white transition-colors"
             >
               Términos de uso
             </Link>
-            <Link 
-              to="/privacidad" 
+            <Link
+              to="/privacidad"
               className="text-artra-lighter-blue text-base font-semibold hover:text-white transition-colors"
             >
               Políticas de privacidad

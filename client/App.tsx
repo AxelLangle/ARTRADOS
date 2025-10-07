@@ -24,8 +24,24 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/tienda" element={<Tienda />} />
           <Route path="/producto/:id" element={<ProductDetail />} />
-          <Route path="/terminos" element={<Placeholder title="Términos y Condiciones de Uso - ARTRA" message="Consulta nuestros términos y condiciones para conocer más sobre cómo funciona ARTRA." />} />
-          <Route path="/privacidad" element={<Placeholder title="Políticas de Privacidad" message="Tu privacidad es importante para nosotros. Conoce cómo protegemos tu información." />} />
+          <Route
+            path="/terminos"
+            element={
+              <Placeholder
+                title="Términos y Condiciones de Uso - ARTRA"
+                message="Consulta nuestros términos y condiciones para conocer más sobre cómo funciona ARTRA."
+              />
+            }
+          />
+          <Route
+            path="/privacidad"
+            element={
+              <Placeholder
+                title="Políticas de Privacidad"
+                message="Tu privacidad es importante para nosotros. Conoce cómo protegemos tu información."
+              />
+            }
+          />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

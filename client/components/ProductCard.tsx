@@ -8,22 +8,27 @@ interface ProductCardProps {
   image: string;
 }
 
-export default function ProductCard({ id, name, price, image }: ProductCardProps) {
+export default function ProductCard({
+  id,
+  name,
+  price,
+  image,
+}: ProductCardProps) {
   return (
     <div className="w-full max-w-[260px] bg-artra-light-blue rounded-lg overflow-hidden">
       {/* Product Image */}
       <div className="relative h-[220px] p-3">
-        <img 
-          src={image} 
+        <img
+          src={image}
           alt={name}
           className="w-full h-full object-cover rounded-2xl"
         />
-        
+
         {/* Action Buttons */}
         <div className="absolute bottom-6 right-6 flex items-center gap-1">
           <button className="w-8 h-8 rounded-full bg-artra-navy flex items-center justify-center hover:bg-artra-blue transition-colors">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <rect width="20" height="20" fill="transparent"/>
+              <rect width="20" height="20" fill="transparent" />
             </svg>
           </button>
           <button className="w-8 h-8 rounded-full bg-artra-navy flex items-center justify-center hover:bg-artra-blue transition-colors">
@@ -41,11 +46,13 @@ export default function ProductCard({ id, name, price, image }: ProductCardProps
           <h3 className="text-artra-navy text-base font-bold mb-2">{name}</h3>
         </Link>
         <p className="text-artra-navy text-base mb-4">${price}</p>
-        
+
         {/* Add to Cart Button */}
         <button className="w-full h-10 bg-artra-blue hover:bg-artra-dark-navy transition-colors rounded-2xl flex items-center justify-center gap-2">
           <ShoppingCart className="w-5 h-5 text-white" />
-          <span className="text-white text-base font-semibold">Añadir al carrito</span>
+          <span className="text-white text-base font-semibold">
+            Añadir al carrito
+          </span>
         </button>
       </div>
     </div>

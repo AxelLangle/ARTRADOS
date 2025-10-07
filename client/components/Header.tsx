@@ -8,17 +8,23 @@ export default function Header() {
       <div className="bg-artra-navy border border-black shadow-lg">
         <div className="container mx-auto px-4 py-6 flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <img 
-              src="https://api.builder.io/api/v1/image/assets/TEMP/8a47ff86a23b1cb6963be447bad0fd0037bd0307?width=184" 
-              alt="ARTRA Logo" 
+            <img
+              src="https://api.builder.io/api/v1/image/assets/TEMP/8a47ff86a23b1cb6963be447bad0fd0037bd0307?width=184"
+              alt="ARTRA Logo"
               className="w-[92px] h-[83px]"
             />
             <div className="flex flex-col">
-              <h1 className="text-white text-[40px] font-bold leading-6">ARTRA</h1>
+              <h1 className="text-white text-[40px] font-bold leading-6">
+                ARTRA
+              </h1>
               <div className="flex items-center gap-2 mt-2">
                 <span className="text-white text-lg font-semibold">Arte</span>
-                <span className="text-white text-[50px] font-semibold leading-6">.</span>
-                <span className="text-white text-lg font-semibold">Tradición</span>
+                <span className="text-white text-[50px] font-semibold leading-6">
+                  .
+                </span>
+                <span className="text-white text-lg font-semibold">
+                  Tradición
+                </span>
               </div>
             </div>
           </div>
@@ -34,13 +40,22 @@ export default function Header() {
           <div className="flex items-center justify-between">
             {/* Navigation */}
             <nav className="flex items-center gap-4">
-              <Link to="/" className="text-white text-xl font-semibold hover:text-artra-lighter-blue transition-colors">
+              <Link
+                to="/"
+                className="text-white text-xl font-semibold hover:text-artra-lighter-blue transition-colors"
+              >
                 Inicio
               </Link>
-              <Link to="/tienda" className="text-white text-xl font-semibold hover:text-artra-lighter-blue transition-colors">
+              <Link
+                to="/tienda"
+                className="text-white text-xl font-semibold hover:text-artra-lighter-blue transition-colors"
+              >
                 Tienda
               </Link>
-              <Link to="#" className="text-white text-xl font-semibold hover:text-artra-lighter-blue transition-colors">
+              <Link
+                to="#"
+                className="text-white text-xl font-semibold hover:text-artra-lighter-blue transition-colors"
+              >
                 ¿Cómo trabajamos?
               </Link>
             </nav>
