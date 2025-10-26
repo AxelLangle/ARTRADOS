@@ -57,10 +57,10 @@ export default function Index() {
       {/* Our History Section */}
       <section className="container mx-auto px-4 py-16">
         <h2 className="text-artra-navy text-[28px] font-bold mb-6">
-          Nuestra Historia
+          Nuestra Historia 
         </h2>
         <p className="text-black text-lg text-justify max-w-[1100px]">
-          En ARTRA, creemos en el ooder de la creativad y la habilidad
+          En ARTRA, creemos en el poder de la creativad y la habilidad
           artesanal. Nuestra misión es apoyar a los artesanos de cualquier
           localidad y ofrecer a los clientes acceso a productos auténticos y
           hechos con pasión. Cada pieza cuenta una historia y estamos orgullosos

@@ -20,7 +20,7 @@ export default function Header() {
               </h1>
               <div className="flex items-center gap-2 mt-2">
                 <span className="text-white text-lg font-semibold">Arte</span>
-                <span className="text-white text-[50px] font-semibold leading-6">
+                <span className="text-white inline-flex items-center text-[44px] font-semibold leading-none transform -translate-y-3.5">
                   .
                 </span>
                 <span className="text-white text-lg font-semibold">
