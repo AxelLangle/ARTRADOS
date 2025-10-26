@@ -3,8 +3,18 @@ import ProductCard from "@/components/ProductCard";
 import { Clock, Star, ChevronDown } from "lucide-react";
 import { useState } from "react";
 
+type FilterType = "material" | "region" | "tecnica" | "uso" | null;
+
 export default function Tienda() {
-  const [selectedMaterial, setSelectedMaterial] = useState<string | null>(null);
+  const [openFilter, setOpenFilter] = useState<FilterType>(null);
+  const [selectedOptions, setSelectedOptions] = useState<{
+    [key: string]: string[];
+  }>({
+    material: [],
+    region: [],
+    tecnica: [],
+    uso: [],
+  });
 
   const products = [
     {
@@ -51,17 +61,60 @@ export default function Tienda() {
     },
   ];
 
-  const materials = [
-    "Alfarería y Cerámica",
-    "Textiles",
-    "Madera",
-    "Metales",
-    "Fibras Vegetales",
-    "Vidrio",
-    "Piedra",
-    "Papel",
-    "Otros Materiales",
-  ];
+  const filterOptions = {
+    material: [
+      "Alfarería y Cerámica",
+      "Textiles",
+      "Madera",
+      "Metales",
+      "Fibras Vegetales",
+      "Vidrio",
+      "Piedra",
+      "Papel",
+      "Otros Materiales",
+    ],
+    region: [
+      "Norte",
+      "Centro",
+      "Sur",
+      "Occidente",
+      "Oriente",
+    ],
+    tecnica: [
+      "Tejido",
+      "Tallado",
+      "Moldeado",
+      "Pintura",
+      "Bordado",
+    ],
+    uso: [
+      "Decoración",
+      "Uso Diario",
+      "Ceremonial",
+      "Vestimenta",
+      "Joyería",
+    ],
+  };
+
+  const toggleFilter = (filter: FilterType) => {
+    setOpenFilter(openFilter === filter ? null : filter);
+  };
+
+  const toggleOption = (filterType: string, option: string) => {
+    setSelectedOptions((prev) => {
+      const current = prev[filterType] || [];
+      if (current.includes(option)) {
+        return {
+          ...prev,
+          [filterType]: current.filter((item) => item !== option),
+        };
+      }
+      return {
+        ...prev,
+        [filterType]: [...current, option],
+      };
+    });
+  };
 
   return (
     <Layout>
@@ -77,47 +130,151 @@ export default function Tienda() {
               </h2>
 
               {/* Material Principal Filter */}
-              <div className="mb-6">
+              <div className="mb-4">
                 <button
-                  className="w-full h-10 bg-artra-lighter-blue rounded-lg px-3 flex items-center justify-between text-black text-base font-medium"
-                  onClick={() =>
-                    setSelectedMaterial(selectedMaterial ? null : "open")
-                  }
+                  className={`w-full h-10 rounded-lg px-3 flex items-center justify-between text-black text-base font-medium transition-colors ${
+                    openFilter === "material"
+                      ? "bg-artra-lighter-blue"
+                      : "bg-white border border-artra-lighter-blue hover:bg-artra-lighter-blue/30"
+                  }`}
+                  onClick={() => toggleFilter("material")}
                 >
                   Por Material Principal
-                  <ChevronDown className="w-4 h-4" />
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform ${
+                      openFilter === "material" ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
 
-                {selectedMaterial && (
-                  <div className="mt-4 space-y-3 pl-4">
-                    {materials.map((material) => (
-                      <div
+                {openFilter === "material" && (
+                  <div className="mt-3 space-y-2 pl-7">
+                    {filterOptions.material.map((material) => (
+                      <button
                         key={material}
-                        className="text-artra-navy text-sm font-medium"
+                        onClick={() => toggleOption("material", material)}
+                        className={`block w-full text-left text-artra-navy text-sm font-medium py-1 px-2 rounded transition-colors ${
+                          selectedOptions.material?.includes(material)
+                            ? "bg-artra-blue text-white"
+                            : "hover:bg-artra-blue/10"
+                        }`}
                       >
                         {material}
-                      </div>
+                      </button>
                     ))}
                   </div>
                 )}
               </div>
 
-              {/* Other Filters */}
-              <div className="space-y-4">
-                <button className="w-full h-10 border border-artra-lighter-blue rounded-lg px-3 flex items-center justify-between text-black text-base font-medium bg-white">
+              {/* Region Filter */}
+              <div className="mb-4">
+                <button
+                  className={`w-full h-10 rounded-lg px-3 flex items-center justify-between text-black text-base font-medium transition-colors ${
+                    openFilter === "region"
+                      ? "bg-artra-lighter-blue"
+                      : "bg-white border border-artra-lighter-blue hover:bg-artra-lighter-blue/30"
+                  }`}
+                  onClick={() => toggleFilter("region")}
+                >
                   Por Región Geográfica
-                  <ChevronDown className="w-4 h-4" />
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform ${
+                      openFilter === "region" ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
 
-                <button className="w-full h-10 border border-artra-lighter-blue rounded-lg px-3 flex items-center justify-between text-black text-base font-medium bg-white">
+                {openFilter === "region" && (
+                  <div className="mt-3 space-y-2 pl-7">
+                    {filterOptions.region.map((region) => (
+                      <button
+                        key={region}
+                        onClick={() => toggleOption("region", region)}
+                        className={`block w-full text-left text-artra-navy text-sm font-medium py-1 px-2 rounded transition-colors ${
+                          selectedOptions.region?.includes(region)
+                            ? "bg-artra-blue text-white"
+                            : "hover:bg-artra-blue/10"
+                        }`}
+                      >
+                        {region}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Tecnica Filter */}
+              <div className="mb-4">
+                <button
+                  className={`w-full h-10 rounded-lg px-3 flex items-center justify-between text-black text-base font-medium transition-colors ${
+                    openFilter === "tecnica"
+                      ? "bg-artra-lighter-blue"
+                      : "bg-white border border-artra-lighter-blue hover:bg-artra-lighter-blue/30"
+                  }`}
+                  onClick={() => toggleFilter("tecnica")}
+                >
                   Por Técnica de Elaboración
-                  <ChevronDown className="w-4 h-4" />
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform ${
+                      openFilter === "tecnica" ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
 
-                <button className="w-full h-10 border border-artra-lighter-blue rounded-lg px-3 flex items-center justify-between text-black text-base font-medium bg-white">
+                {openFilter === "tecnica" && (
+                  <div className="mt-3 space-y-2 pl-7">
+                    {filterOptions.tecnica.map((tecnica) => (
+                      <button
+                        key={tecnica}
+                        onClick={() => toggleOption("tecnica", tecnica)}
+                        className={`block w-full text-left text-artra-navy text-sm font-medium py-1 px-2 rounded transition-colors ${
+                          selectedOptions.tecnica?.includes(tecnica)
+                            ? "bg-artra-blue text-white"
+                            : "hover:bg-artra-blue/10"
+                        }`}
+                      >
+                        {tecnica}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Uso Filter */}
+              <div className="mb-6">
+                <button
+                  className={`w-full h-10 rounded-lg px-3 flex items-center justify-between text-black text-base font-medium transition-colors ${
+                    openFilter === "uso"
+                      ? "bg-artra-lighter-blue"
+                      : "bg-white border border-artra-lighter-blue hover:bg-artra-lighter-blue/30"
+                  }`}
+                  onClick={() => toggleFilter("uso")}
+                >
                   Por Uso o Función
-                  <ChevronDown className="w-4 h-4" />
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform ${
+                      openFilter === "uso" ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
+
+                {openFilter === "uso" && (
+                  <div className="mt-3 space-y-2 pl-7">
+                    {filterOptions.uso.map((uso) => (
+                      <button
+                        key={uso}
+                        onClick={() => toggleOption("uso", uso)}
+                        className={`block w-full text-left text-artra-navy text-sm font-medium py-1 px-2 rounded transition-colors ${
+                          selectedOptions.uso?.includes(uso)
+                            ? "bg-artra-blue text-white"
+                            : "hover:bg-artra-blue/10"
+                        }`}
+                      >
+                        {uso}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Newsletter */}

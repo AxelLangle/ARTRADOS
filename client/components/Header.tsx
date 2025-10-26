@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Search, Heart, ShoppingCart, User } from "lucide-react";
+import { Search, Heart, ShoppingCart } from "lucide-react";
+import UserMenu from "./UserMenu";
 
 export default function Header() {
   return (
@@ -53,10 +54,10 @@ export default function Header() {
                 Tienda
               </Link>
               <Link
-                to="#"
+                to="/quien-es-artra"
                 className="text-white text-xl font-semibold hover:text-artra-lighter-blue transition-colors"
               >
-                ¿Cómo trabajamos?
+                ¿Quién es ARTRA?
               </Link>
             </nav>
 
@@ -80,9 +81,7 @@ export default function Header() {
               <button className="w-[50px] h-[50px] flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors">
                 <ShoppingCart className="w-7 h-7 text-artra-navy" />
               </button>
-              <button className="w-[50px] h-[50px] flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors">
-                <User className="w-7 h-7 text-artra-navy" />
-              </button>
+              <UserMenu />
             </div>
           </div>
         </div>
