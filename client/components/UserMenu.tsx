@@ -16,12 +16,12 @@ export default function UserMenu() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
+//<button class="p-2 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart w-6 h-6 text-artra-navy" aria-hidden="true"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg></button>
   return (
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-[50px] h-[50px] flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors"
+        className="w-[40px] h-[40px] flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors"
       >
         <User className="w-7 h-7 text-artra-navy" />
       </button>
