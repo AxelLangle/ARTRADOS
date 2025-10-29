@@ -2,8 +2,13 @@
 import { Link } from "react-router-dom";
 import { Search, Heart, ShoppingCart } from "lucide-react";
 import UserMenu from "./UserMenu";
+import { useCart } from "@/contexts/CartContext";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 export default function Header() {
+  const { items: cartItems } = useCart();
+  const { items: wishlistItems } = useWishlist();
+
   return (
     // Añadido sticky, top-0, z-50. Reducido py-4
     <header className="w-full bg-artra-navy sticky top-0 z-50">
@@ -79,11 +84,21 @@ export default function Header() {
           {/* Icons */}
           <div className="flex items-center gap-2"> {/* Reducido gap */}
             {/* Reducido tamaño de botones/iconos */}
-            <Link to="/favoritos" className="p-2 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors">
+            <Link to="/favoritos" className="p-2 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors relative">
               <Heart className="w-6 h-6 text-artra-navy" />
+              {wishlistItems.length > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                  {wishlistItems.length}
+                </span>
+              )}
             </Link>
-            <Link to="/carrito" className="p-2 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors">
+            <Link to="/carrito" className="p-2 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors relative">
               <ShoppingCart className="w-6 h-6 text-artra-navy" />
+              {cartItems.length > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                  {cartItems.length}
+                </span>
+              )}
             </Link>
             <UserMenu /> {/* El tamaño del botón UserMenu se define dentro del componente */}
           </div>
