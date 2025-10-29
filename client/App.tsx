@@ -6,10 +6,18 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { CartProvider } from "./contexts/CartContext";
+import { WishlistProvider } from "./contexts/WishlistContext";
 import Index from "./pages/Index";
 import Tienda from "./pages/Tienda";
 import ProductDetail from "./pages/ProductDetail";
 import QuienEsArtra from "./pages/QuienEsArtra";
+import Wishlist from "./pages/Wishlist";
+import Cart from "./pages/Cart";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import ForgotPassword from "./pages/ForgotPassword";
+import GoogleLogin from "./pages/GoogleLogin";
 import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
 
@@ -18,36 +26,46 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/tienda" element={<Tienda />} />
-          <Route path="/producto/:id" element={<ProductDetail />} />
-          <Route path="/quien-es-artra" element={<QuienEsArtra />} />
-          <Route
-            path="/terminos"
-            element={
-              <Placeholder
-                title="Términos y Condiciones de Uso - ARTRA"
-                message="Consulta nuestros términos y condiciones para conocer más sobre cómo funciona ARTRA."
+      <CartProvider>
+        <WishlistProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/tienda" element={<Tienda />} />
+              <Route path="/producto/:id" element={<ProductDetail />} />
+              <Route path="/quien-es-artra" element={<QuienEsArtra />} />
+              <Route path="/favoritos" element={<Wishlist />} />
+              <Route path="/carrito" element={<Cart />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/crear-cuenta" element={<SignUp />} />
+              <Route path="/recuperar-contraseña" element={<ForgotPassword />} />
+              <Route path="/login/google" element={<GoogleLogin />} />
+              <Route
+                path="/terminos"
+                element={
+                  <Placeholder
+                    title="Términos y Condiciones de Uso - ARTRA"
+                    message="Consulta nuestros términos y condiciones para conocer más sobre cómo funciona ARTRA."
+                  />
+                }
               />
-            }
-          />
-          <Route
-            path="/privacidad"
-            element={
-              <Placeholder
-                title="Políticas de Privacidad"
-                message="Tu privacidad es importante para nosotros. Conoce cómo protegemos tu información."
+              <Route
+                path="/privacidad"
+                element={
+                  <Placeholder
+                    title="Políticas de Privacidad"
+                    message="Tu privacidad es importante para nosotros. Conoce cómo protegemos tu información."
+                  />
+                }
               />
-            }
-          />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </WishlistProvider>
+      </CartProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { User, Settings, ShoppingBag, HelpCircle, LogOut, LogIn } from "lucide-react";
 
 export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Change this based on auth state
   const menuRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -96,7 +98,10 @@ export default function UserMenu() {
                 </button>
 
                 <button
-                  onClick={() => setIsLoggedIn(true)}
+                  onClick={() => {
+                    setIsOpen(false);
+                    navigate("/login");
+                  }}
                   className="w-full h-14 px-4 flex items-center gap-4 hover:bg-gray-50 transition-colors"
                 >
                   <div className="w-[50px] h-[50px] flex items-center justify-center rounded-2xl bg-artra-lighter-blue/35">

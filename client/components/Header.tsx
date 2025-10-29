@@ -79,12 +79,12 @@ export default function Header() {
           {/* Icons */}
           <div className="flex items-center gap-2"> {/* Reducido gap */}
             {/* Reducido tamaño de botones/iconos */}
-            <button className="p-2 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors">
+            <Link to="/favoritos" className="p-2 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors">
               <Heart className="w-6 h-6 text-artra-navy" />
-            </button>
-            <button className="p-2 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors">
+            </Link>
+            <Link to="/carrito" className="p-2 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors">
               <ShoppingCart className="w-6 h-6 text-artra-navy" />
-            </button>
+            </Link>
             <UserMenu /> {/* El tamaño del botón UserMenu se define dentro del componente */}
           </div>
            {/* "Hecho en México" - opcional, quizás mejor en footer */}
