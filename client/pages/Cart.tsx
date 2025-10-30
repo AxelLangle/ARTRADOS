@@ -138,12 +138,14 @@ export default function Cart() {
               </div>
 
               {/* Checkout Button */}
-              <button
-                disabled={items.length === 0}
-                className="w-full h-10 bg-artra-dark-navy hover:bg-artra-navy transition-colors rounded-2xl text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+              <Link
+                to="/checkout/payment"
+                className={`w-full h-10 bg-artra-dark-navy hover:bg-artra-navy transition-colors rounded-2xl text-white font-bold flex items-center justify-center ${
+                  items.length === 0 ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
+                }`}
               >
                 Proceder al pago
-              </button>
+              </Link>
             </div>
           </div>
         </div>
