@@ -34,10 +34,12 @@ const App = () => (
     <TooltipProvider>
       <CartProvider>
         <WishlistProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
+          <PaymentProvider>
+            <AddressProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/tienda" element={<Tienda />} />
               <Route path="/producto/:id" element={<ProductDetail />} />
@@ -72,8 +74,10 @@ const App = () => (
               />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
+                </Routes>
+              </BrowserRouter>
+            </AddressProvider>
+          </PaymentProvider>
         </WishlistProvider>
       </CartProvider>
     </TooltipProvider>
