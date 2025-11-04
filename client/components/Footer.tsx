@@ -21,6 +21,12 @@ export default function Footer() {
             >
               Políticas de privacidad
             </Link>
+            <Link
+              to="/condicionesEnvio"
+              className="text-artra-lighter-blue text-base font-semibold hover:text-white transition-colors"
+            >
+              Condiciones de envío
+            </Link>
           </div>
         </div>
       </div>
