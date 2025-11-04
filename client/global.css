@@ -43,6 +43,7 @@
     --artra-light-blue: 222 53% 81%;
     --artra-lighter-blue: 219 51% 70%;
     --artra-dark-navy: 229 58% 29%;
+    --artra-light-bg: 218 60% 95%;
   }
 }
 
@@ -72,6 +73,9 @@
   .bg-artra-dark-navy {
     background-color: hsl(var(--artra-dark-navy));
   }
+  .bg-artra-light-bg {
+    background-color: hsl(var(--artra-light-bg));
+  }
   .text-artra-navy {
     color: hsl(var(--artra-navy));
   }
@@ -80,5 +84,8 @@
   }
   .text-artra-lighter-blue {
     color: hsl(var(--artra-lighter-blue));
+  }
+  .text-artra-dark-navy {
+    color: hsl(var(--artra-dark-navy));
   }
 }
