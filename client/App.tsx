@@ -14,7 +14,7 @@ import Index from "./pages/Inicio";
 import Tienda from "./pages/Tienda";
 import ProductDetail from "./pages/DetallesProducto";
 import QuienEsArtra from "./pages/QuienEsArtra";
-import Wishlist from "./pages/ListaDeseos";
+import ListaDeseos from "./pages/ListaDeseos";
 import Cart from "./pages/Carrito";
 import Login from "./pages/IniciarSesion";
 import SignUp from "./pages/CrearCuenta";
@@ -47,7 +47,7 @@ const App = () => (
               <Route path="/tienda" element={<Tienda />} />
               <Route path="/producto/:id" element={<ProductDetail />} />
               <Route path="/quien-es-artra" element={<QuienEsArtra />} />
-              <Route path="/favoritos" element={<Wishlist />} />
+              <Route path="/favoritos" element={<ListaDeseos />} />
               <Route path="/carrito" element={<Cart />} />
               <Route path="/checkout/payment" element={<SelectPaymentMethod />} />
               <Route path="/checkout/add-card" element={<AddCardForm />} />
