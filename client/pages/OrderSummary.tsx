@@ -12,55 +12,65 @@ export default function OrderSummary() {
   const { selectedAddress } = useAddress();
 
   const handleConfirm = () => {
-    alert("¡Compra confirmada!");
+    alert("¡Compra confirmada! Gracias por tu compra.");
     navigate("/");
   };
 
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8 max-w-[1200px]">
-        <h1 className="text-artra-navy text-[40px] font-bold mb-12">
+        <h1 className="text-[#14366D] text-[40px] font-extrabold leading-6 mb-12">
           Confirmacion de pedido
         </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[606px_1fr] gap-8">
           {/* Left Column - Summary Box */}
           <div>
-            <div className="bg-[#F7FAFC] border-3 border-artra-dark-navy rounded-2xl p-6">
-              <h2 className="text-black text-[28px] font-bold mb-6">
+            <div className="bg-[#F7FAFC] border-[3px] border-[#081F44] rounded-2xl p-6">
+              <h2 className="text-[#0D121C] text-[28px] font-bold leading-7 mb-6">
                 Revisa y confirma
               </h2>
 
               <div className="space-y-4 mb-6">
-                <div className="flex justify-between items-center">
-                  <span className="text-[#476B9E] text-xl">Producto</span>
-                  <span className="text-black text-xl font-bold">
+                <div className="flex justify-between items-center py-2">
+                  <span className="text-[#476B9E] text-xl font-normal leading-[21px]">
+                    Producto
+                  </span>
+                  <span className="text-[#0D121C] text-xl font-semibold leading-[21px]">
                     ${total.toFixed(2)}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-[#476B9E] text-xl">Envío</span>
-                  <span className="text-black text-xl font-bold">Gratis</span>
-                </div>
-              </div>
-
-              <div className="border-t border-gray-300 pt-4 mb-6">
-                <div className="flex justify-between items-center">
-                  <span className="text-black text-[26px] font-bold">Pagas</span>
-                  <span className="text-black text-xl font-bold">
-                    ${total.toFixed(2)}
+                <div className="flex justify-between items-center py-2">
+                  <span className="text-[#476B9E] text-xl font-normal leading-[21px]">
+                    Envío
+                  </span>
+                  <span className="text-[#0D121C] text-xl font-semibold leading-[21px]">
+                    Gratis
                   </span>
                 </div>
               </div>
 
-              <button
-                onClick={handleConfirm}
-                className="w-full h-12 bg-artra-dark-navy hover:bg-artra-navy transition-colors rounded-lg"
-              >
-                <span className="text-white text-xl font-bold">
-                  Confirmar compra
-                </span>
-              </button>
+              <div className="border-t border-[#7D7979] pt-4 mb-6">
+                <div className="flex justify-between items-center py-2">
+                  <span className="text-black text-[26px] font-extrabold leading-[21px]">
+                    Pagas
+                  </span>
+                  <span className="text-[#0D121C] text-xl font-extrabold leading-[21px]">
+                    ${total.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="px-4 py-3">
+                <button
+                  onClick={handleConfirm}
+                  className="w-full h-10 bg-[#081F44] hover:bg-[#1F2F74] transition-colors rounded-lg"
+                >
+                  <span className="text-[#F7FAFC] text-xl font-bold leading-[21px]">
+                    Confirmar compra
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -68,30 +78,31 @@ export default function OrderSummary() {
           <div className="space-y-8">
             {/* Delivery Details */}
             <div>
-              <h2 className="text-artra-navy text-[35px] font-bold mb-6">
+              <h2 className="text-[#14366D] text-[35px] font-extrabold mb-6">
                 Detalle de la entrega
               </h2>
-              <div className="bg-white border-3 border-artra-dark-navy rounded-2xl p-8">
+              <div className="bg-white border-[3px] border-[#081F44] rounded-2xl p-8">
                 <div className="flex gap-6">
                   <div className="w-20 h-20 rounded-[19.5px] border border-[#060357] flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-10 h-10 text-artra-dark-navy" fill="#081F44" />
+                    <MapPin className="w-10 h-10 text-[#081F44]" fill="#081F44" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-artra-blue text-[28px] font-bold mb-2">
-                      {selectedAddress?.name}
+                    <p className="text-[#4569AD] text-[28px] font-semibold mb-2">
+                      {selectedAddress?.name || "Boulevard Felipe Angeles"}
                     </p>
-                    <p className="text-black text-2xl">
-                      {selectedAddress?.street}, {selectedAddress?.city},{" "}
-                      {selectedAddress?.state}, C.P. {selectedAddress?.postalCode}
+                    <p className="text-black text-2xl font-normal">
+                      {selectedAddress
+                        ? `${selectedAddress.street}, ${selectedAddress.city}, ${selectedAddress.state}, C.P. ${selectedAddress.postalCode}`
+                        : "Av. de los Dioses #15, Col. Centro, Teotihuacán de Arista, México, C.P. 55800"}
                     </p>
                   </div>
                 </div>
-                <div className="border-t border-gray-300 mt-6 pt-6">
+                <div className="border-t border-[#7D7979] mt-6 pt-6">
                   <button
                     onClick={() => navigate("/checkout/address")}
-                    className="flex items-center gap-3 text-artra-navy hover:text-artra-blue transition-colors"
+                    className="flex items-center gap-3 text-[#1F2F74] hover:text-[#4569AD] transition-colors"
                   >
-                    <Edit className="w-7 h-7" strokeWidth={2.5} />
+                    <Edit className="w-[30px] h-[30px]" strokeWidth={4} />
                     <span className="text-xl font-bold">
                       Modificar dirección de envio
                     </span>
@@ -101,16 +112,16 @@ export default function OrderSummary() {
             </div>
 
             {/* Products to Deliver */}
-            <div className="bg-white border-3 border-artra-dark-navy rounded-2xl p-8">
+            <div className="bg-white border-[3px] border-[#081F44] rounded-2xl p-8">
               <div className="flex gap-6 items-center">
                 <div className="w-20 h-20 rounded-[19.5px] border border-[#060357] flex items-center justify-center flex-shrink-0">
-                  <ImageIcon className="w-12 h-12 text-artra-dark-navy" fill="#081F44" />
+                  <ImageIcon className="w-12 h-12 text-[#081F44]" fill="#081F44" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-artra-blue text-[28px] font-bold mb-2">
+                  <p className="text-[#4569AD] text-[28px] font-semibold mb-2">
                     Llega en 3 días a tu domicilio
                   </p>
-                  <button className="text-artra-dark-navy text-xl hover:text-artra-blue transition-colors">
+                  <button className="text-[#081F44] text-xl font-medium hover:text-[#4569AD] transition-colors">
                     Mostrar productos
                   </button>
                 </div>
@@ -119,10 +130,10 @@ export default function OrderSummary() {
 
             {/* Payment Details */}
             <div>
-              <h2 className="text-black text-[35px] font-bold mb-6">
+              <h2 className="text-black text-[35px] font-extrabold mb-6">
                 Detalle del pago
               </h2>
-              <div className="bg-white border-3 border-artra-dark-navy rounded-2xl p-8">
+              <div className="bg-white border-[3px] border-[#081F44] rounded-2xl p-8">
                 <div className="flex gap-6">
                   <div className="w-[100px] h-[100px] rounded-full border-2 border-[#060357] flex items-center justify-center flex-shrink-0 bg-white">
                     <img
@@ -132,21 +143,24 @@ export default function OrderSummary() {
                     />
                   </div>
                   <div className="flex-1">
-                    <p className="text-artra-blue text-[28px] font-bold mb-2">
-                      {selectedPaymentMethod?.bank} {selectedPaymentMethod?.cardNumber}
+                    <p className="text-[#4569AD] text-[28px] font-semibold mb-2">
+                      {selectedPaymentMethod?.bank || "BBVA"} ****{" "}
+                      {selectedPaymentMethod?.cardNumber?.slice(-4) || "5678"}
                     </p>
-                    <p className="text-black text-2xl mb-2">1 mes de $765.18</p>
-                    <button className="text-artra-dark-navy text-xl hover:text-artra-blue transition-colors">
+                    <p className="text-black text-2xl font-normal mb-2">
+                      1 mes de ${(total / 1).toFixed(2)}
+                    </p>
+                    <button className="text-[#081F44] text-xl font-medium hover:text-[#4569AD] transition-colors">
                       Modificar meses
                     </button>
                   </div>
                 </div>
-                <div className="border-t border-gray-300 mt-6 pt-6">
+                <div className="border-t border-[#7D7979] mt-6 pt-6">
                   <button
                     onClick={() => navigate("/checkout/payment")}
-                    className="flex items-center gap-3 text-artra-navy hover:text-artra-blue transition-colors"
+                    className="flex items-center gap-3 text-[#1F2F74] hover:text-[#4569AD] transition-colors"
                   >
-                    <Edit className="w-7 h-7" strokeWidth={2.5} />
+                    <Edit className="w-[30px] h-[30px]" strokeWidth={4} />
                     <span className="text-xl font-bold">Modificar forma de pago</span>
                   </button>
                 </div>
