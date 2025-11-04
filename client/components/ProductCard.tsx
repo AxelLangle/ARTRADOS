@@ -1,7 +1,9 @@
-import { Heart, Share2, ShoppingCart } from "lucide-react";
+import { Heart, Share2, ShoppingCart, QrCode } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
+import QRModal from "@/components/QRModal";
 
 interface ProductCardProps {
   id: string;
@@ -19,6 +21,7 @@ export default function ProductCard({
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const inWishlist = isInWishlist(id);
+  const [isQRModalOpen, setIsQRModalOpen] = useState(false);
 
   const handleAddToCart = () => {
     addToCart({ id, name, price, image });
@@ -44,10 +47,11 @@ export default function ProductCard({
 
         {/* Action Buttons */}
         <div className="absolute bottom-6 right-6 flex items-center gap-1">
-          <button className="w-8 h-8 rounded-full bg-artra-navy flex items-center justify-center hover:bg-artra-blue transition-colors">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <rect width="20" height="20" fill="transparent" />
-            </svg>
+          <button 
+            onClick={() => setIsQRModalOpen(true)}
+            className="w-8 h-8 rounded-full bg-artra-navy flex items-center justify-center hover:bg-artra-blue transition-colors"
+          >
+            <QrCode className="w-4 h-4 text-gray-300" />
           </button>
           <button
             onClick={handleToggleWishlist}
@@ -83,6 +87,12 @@ export default function ProductCard({
           </span>
         </button>
       </div>
+
+      {/* QR Code Modal */}
+      <QRModal 
+        isOpen={isQRModalOpen} 
+        onClose={() => setIsQRModalOpen(false)}
+      />
     </div>
   );
 }
