@@ -26,7 +26,7 @@ import SelectAddress from "./pages/SelectAddress";
 import OrderSummary from "./pages/OrderSummary";
 import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
-import TerminosDeUso from "./pages/TeminosDeUso";
+import TerminosDeUso from "./pages/TerminosDeUso";
 import CondicionesEnvio from "./pages/CondicionesEnvio";
 import AvisoPrivacidad from "./pages/PoliticasPrivacidad";
 
