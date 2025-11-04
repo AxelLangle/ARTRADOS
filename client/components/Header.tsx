@@ -4,6 +4,14 @@ import { Search, Heart, ShoppingCart } from "lucide-react";
 import UserMenu from "./UserMenu";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
+import {
+  NAV_LINK,
+  ICON_BUTTON,
+  BADGE_COUNT,
+  ICON_NAVY_24,
+  INLINE_ROW_TIGHT,
+  SMALL_WHITE_LABEL,
+} from "@/components/styles/headerClasses";
 
 export default function Header() {
   const { items: cartItems } = useCart();
@@ -11,31 +19,31 @@ export default function Header() {
 
   return (
     // Añadido sticky, top-0, z-50. Reducido py-4
-    <header className="w-full bg-artra-navy sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+    <header className="Header">
+      <div className="Logo">
         {/* Logo y Nombre */}
-        <div className="flex items-center gap-4"> {/* Reducido gap */}
+        <div className="Logo_div"> {/* Reducido gap */}
           <Link to="/" className="flex items-center gap-3"> {/* Link en logo/nombre */}
             <img
               src="https://api.builder.io/api/v1/image/assets/TEMP/8a47ff86a23b1cb6963be447bad0fd0037bd0307?width=184"
               alt="ARTRA Logo"
               // Reducido tamaño del logo ligeramente
-              className="w-[70px] h-[64px]"
+              className="Logo_imagen"
             />
-            <div className="flex flex-col">
+            <div className="Artra_Texto">
               <h1 className="text-white text-[26px] font-bold leading-tight -mb-1"> {/* Reducido tamaño y ajustado leading */}
                 ARTRA
               </h1>
-              <div className="flex items-center gap-1 mt-0"> {/* Reducido gap y mt */}
-                <span className="text-white text-[12px] font-semibold">Arte</span> {/* Reducido tamaño */}
+              <div className={INLINE_ROW_TIGHT}> {/* Reducido gap y mt */}
+                <span className={SMALL_WHITE_LABEL}>Arte</span> {/* Reducido tamaño */}
                 <span className="text-white inline-flex items-center text-[24px] font-semibold leading-none transform -translate-y-1.5"> {/* Ajustado */}
                   .
                 </span>
-                <span className="text-white text-[12px] font-semibold"> {/* Reducido tamaño */}
+                <span className={SMALL_WHITE_LABEL}> {/* Reducido tamaño */}
                   Tradición
                 </span>
               </div>
-              <div className="flex items-center gap-1 mt-0"> {/* Reducido gap y mt */}
+              <div className={INLINE_ROW_TIGHT}> {/* Reducido gap y mt */}
                 <span className="text-cyan-400 text-[8px] font-semibold"> {/* Reducido tamaño */}
                   Hecho en México
                 </span>
@@ -48,19 +56,19 @@ export default function Header() {
         <nav className="flex items-center gap-4 ml-8"> {/* Añadido margen */}
           <Link
             to="/"
-            className="text-white text-base font-semibold hover:text-artra-lighter-blue transition-colors" // Reducido tamaño
+            className={NAV_LINK} // Reducido tamaño
           >
             Inicio
           </Link>
           <Link
             to="/tienda"
-            className="text-white text-base font-semibold hover:text-artra-lighter-blue transition-colors" // Reducido tamaño
+            className={NAV_LINK} // Reducido tamaño
           >
             Tienda
           </Link>
           <Link
             to="/quien-es-artra"
-            className="text-white text-base font-semibold hover:text-artra-lighter-blue transition-colors" // Reducido tamaño
+            className={NAV_LINK} // Reducido tamaño
           >
             ¿Quién es ARTRA?
           </Link>
@@ -84,18 +92,18 @@ export default function Header() {
           {/* Icons */}
           <div className="flex items-center gap-2"> {/* Reducido gap */}
             {/* Reducido tamaño de botones/iconos */}
-            <Link to="/favoritos" className="p-2 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors relative">
-              <Heart className="w-6 h-6 text-artra-navy" />
+            <Link to="/favoritos" className={ICON_BUTTON}>
+              <Heart className={ICON_NAVY_24} />
               {wishlistItems.length > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                <span className={BADGE_COUNT}>
                   {wishlistItems.length}
                 </span>
               )}
             </Link>
-            <Link to="/carrito" className="p-2 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition-colors relative">
-              <ShoppingCart className="w-6 h-6 text-artra-navy" />
+            <Link to="/carrito" className={ICON_BUTTON}>
+              <ShoppingCart className={ICON_NAVY_24} />
               {cartItems.length > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                <span className={BADGE_COUNT}>
                   {cartItems.length}
                 </span>
               )}
