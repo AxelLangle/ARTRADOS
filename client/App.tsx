@@ -26,6 +26,9 @@ import SelectAddress from "./pages/SelectAddress";
 import OrderSummary from "./pages/OrderSummary";
 import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
+import TerminosDeUso from "./pages/TeminosDeUso";
+import CondicionesEnvio from "./pages/CondicionesEnvio";
+import AvisoPrivacidad from "./pages/PoliticasPrivacidad";
 
 const queryClient = new QueryClient();
 
@@ -53,25 +56,10 @@ const App = () => (
               <Route path="/login" element={<Login />} />
               <Route path="/crear-cuenta" element={<SignUp />} />
               <Route path="/recuperar-contraseña" element={<ForgotPassword />} />
-              <Route path="/login/google" element={<GoogleLogin />} />
-              <Route
-                path="/terminos"
-                element={
-                  <Placeholder
-                    title="Términos y Condiciones de Uso - ARTRA"
-                    message="Consulta nuestros términos y condiciones para conocer más sobre cómo funciona ARTRA."
-                  />
-                }
-              />
-              <Route
-                path="/privacidad"
-                element={
-                  <Placeholder
-                    title="Políticas de Privacidad"
-                    message="Tu privacidad es importante para nosotros. Conoce cómo protegemos tu información."
-                  />
-                }
-              />
+              <Route path="/terminos" element={<TerminosDeUso />} />
+              <Route path="/condicionesEnvio" element={<CondicionesEnvio />} />
+              <Route path="/privacidad" element={<AvisoPrivacidad />} />
+
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
                 </Routes>
