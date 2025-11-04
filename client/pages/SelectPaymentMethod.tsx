@@ -5,7 +5,8 @@ import { usePayment } from "@/contexts/PaymentContext";
 
 export default function SelectPaymentMethod() {
   const navigate = useNavigate();
-  const { paymentMethods, selectedPaymentMethod, selectPaymentMethod } = usePayment();
+  const { paymentMethods, selectedPaymentMethod, selectPaymentMethod } =
+    usePayment();
 
   const handleNext = () => {
     if (selectedPaymentMethod) {
@@ -53,7 +54,9 @@ export default function SelectPaymentMethod() {
                           <p className="text-[#4569AD] text-[28px] font-semibold">
                             {method.bank}
                           </p>
-                          <p className="text-black text-xl font-normal">{method.cardNumber}</p>
+                          <p className="text-black text-xl font-normal">
+                            {method.cardNumber}
+                          </p>
                         </div>
                         <div
                           className={`w-[30px] h-[30px] rounded-full border-[7px] flex-shrink-0 ${
@@ -83,7 +86,10 @@ export default function SelectPaymentMethod() {
                 onClick={() => navigate("/checkout/add-card")}
                 className="w-full h-20 rounded-[30px] border-2 border-[#14366D] bg-white hover:bg-gray-50 transition-colors flex items-center gap-6 px-8"
               >
-                <CreditCard className="w-[50px] h-[36px] text-[#14366D]" strokeWidth={6} />
+                <CreditCard
+                  className="w-[50px] h-[36px] text-[#14366D]"
+                  strokeWidth={6}
+                />
                 <span className="text-[#14366D] text-2xl font-semibold">
                   Agregar nueva tarjeta de credito/debito
                 </span>

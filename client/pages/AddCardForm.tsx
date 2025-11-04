@@ -147,13 +147,17 @@ export default function AddCardForm() {
                   onClick={handleCancel}
                   className="w-60 h-[68px] rounded-2xl bg-[#D9D9D9] hover:bg-gray-400 transition-colors"
                 >
-                  <span className="text-black text-2xl font-bold leading-[21px]">Cancelar</span>
+                  <span className="text-black text-2xl font-bold leading-[21px]">
+                    Cancelar
+                  </span>
                 </button>
                 <button
                   onClick={handleSubmit}
                   className="w-60 h-[68px] rounded-2xl bg-[#060357] hover:bg-[#14366D] transition-colors"
                 >
-                  <span className="text-[#F7FAFC] text-[25px] font-bold leading-[21px]">Guardar</span>
+                  <span className="text-[#F7FAFC] text-[25px] font-bold leading-[21px]">
+                    Guardar
+                  </span>
                 </button>
               </div>
             </div>

@@ -84,7 +84,10 @@ export default function OrderSummary() {
               <div className="bg-white border-[3px] border-[#081F44] rounded-2xl p-8">
                 <div className="flex gap-6">
                   <div className="w-20 h-20 rounded-[19.5px] border border-[#060357] flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-10 h-10 text-[#081F44]" fill="#081F44" />
+                    <MapPin
+                      className="w-10 h-10 text-[#081F44]"
+                      fill="#081F44"
+                    />
                   </div>
                   <div className="flex-1">
                     <p className="text-[#4569AD] text-[28px] font-semibold mb-2">
@@ -115,7 +118,10 @@ export default function OrderSummary() {
             <div className="bg-white border-[3px] border-[#081F44] rounded-2xl p-8">
               <div className="flex gap-6 items-center">
                 <div className="w-20 h-20 rounded-[19.5px] border border-[#060357] flex items-center justify-center flex-shrink-0">
-                  <ImageIcon className="w-12 h-12 text-[#081F44]" fill="#081F44" />
+                  <ImageIcon
+                    className="w-12 h-12 text-[#081F44]"
+                    fill="#081F44"
+                  />
                 </div>
                 <div className="flex-1">
                   <p className="text-[#4569AD] text-[28px] font-semibold mb-2">
@@ -161,7 +167,9 @@ export default function OrderSummary() {
                     className="flex items-center gap-3 text-[#1F2F74] hover:text-[#4569AD] transition-colors"
                   >
                     <Edit className="w-[30px] h-[30px]" strokeWidth={4} />
-                    <span className="text-xl font-bold">Modificar forma de pago</span>
+                    <span className="text-xl font-bold">
+                      Modificar forma de pago
+                    </span>
                   </button>
                 </div>
               </div>
