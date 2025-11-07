@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Settings, ShoppingBag, HelpCircle, LogOut, LogIn } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Change this based on auth state
+  const { isLogged, logout } = useAuth();
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -34,7 +35,7 @@ export default function UserMenu() {
           <div className="absolute -top-3 right-4 w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-b-[12px] border-b-artra-blue"></div>
           
           <div className="w-[268px] bg-white border-2 border-artra-blue rounded-2xl shadow-lg overflow-hidden">
-            {isLoggedIn ? (
+            {isLogged ? (
               // Logged In Menu
               <div>
                 <button className="w-full h-14 px-4 flex items-center gap-4 hover:bg-gray-50 transition-colors border-b border-gray-100">
@@ -74,7 +75,10 @@ export default function UserMenu() {
                 </button>
 
                 <button
-                  onClick={() => setIsLoggedIn(false)}
+                  onClick={() => {
+                    logout();
+                    setIsOpen(false);
+                  }}
                   className="w-full h-14 px-4 flex items-center gap-4 hover:bg-gray-50 transition-colors"
                 >
                   <div className="w-[50px] h-[50px] flex items-center justify-center rounded-2xl bg-artra-lighter-blue/35">

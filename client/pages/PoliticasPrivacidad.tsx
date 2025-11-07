@@ -30,19 +30,17 @@ export default function AvisoPrivacidad() {
                         Sus datos personales seran utilizados para:
                     </p>
                     <ul className="list-disc pl-6 space-y-2">
-                      <li>
-                        <strong>Finalidades Primarias:</strong> 
+                      
+                      <strong>Finalidades Primarias:</strong> 
                             <li>Crear y gestionar su cuenta de usuario.</li>
                             <li>Procesar sus compras y los pagos correspondientes.</li>
                             <li>Facilitar la comunicacion entre Clientes y Artesanos.</li>
                             <li>Coordinar el envio de productos.</li>
-
-                      </li>
-                      <li>
+                      <br/>
                         <strong>Finalidades Secundarias:</strong>
                             <li>Enviar comunicaciones promocionales sobre productos destacados o nuevas "Historias".</li>
                             <li>Personalizar su experiencia de navegacion en la plataforma.</li>
-                      </li>
+                      
                     </ul>
 
                     <h2 className="text-artra-navy text-[28px] font-bold mb-3">3. Transferencia de Datos</h2>
@@ -65,7 +63,20 @@ export default function AvisoPrivacidad() {
                     <h2 className="text-artra-navy text-[28px] font-bold mb-3">5. Uso de Cookies: </h2>
                     <p className="text-black text-lg leading-relaxed"> Utilizamos cookies para mejorar la funcionalidad del sitio, recordar sus preferencias y analizar el trafico. Al navegar en ARTRA usted acepta su uso.</p>
                 </ol>
-    
+                <div className="flex gap-4 justify-center">
+              <a
+                href="/"
+                className="px-8 py-3 bg-artra-blue hover:bg-artra-dark-navy transition-colors rounded-2xl text-white font-semibold"
+              >
+                Ir al Inicio
+              </a>
+              <a
+                href="/tienda"
+                className="px-8 py-3 border-2 border-artra-blue text-artra-navy hover:bg-artra-light-blue transition-colors rounded-2xl font-semibold"
+              >
+                Ver Tienda
+              </a>
+            </div>
                 <div className="mt-12 pt-8 border-t border-gray-200">
                   <Link
                     to="/"

@@ -10,6 +10,7 @@ import { CartProvider } from "./contexts/CartContext";
 import { WishlistProvider } from "./contexts/WishlistContext";
 import { PaymentProvider } from "./contexts/PaymentContext";
 import { AddressProvider } from "./contexts/AddressContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import Index from "./pages/Inicio";
 import Tienda from "./pages/Tienda";
 import ProductDetail from "./pages/DetallesProducto";
@@ -35,10 +36,11 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <CartProvider>
-        <WishlistProvider>
-          <PaymentProvider>
-            <AddressProvider>
+      <AuthProvider>
+        <CartProvider>
+          <WishlistProvider>
+            <PaymentProvider>
+              <AddressProvider>
               <Toaster />
               <Sonner />
               <BrowserRouter>
@@ -68,6 +70,7 @@ const App = () => (
           </PaymentProvider>
         </WishlistProvider>
       </CartProvider>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

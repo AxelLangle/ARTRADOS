@@ -23,7 +23,7 @@ export default function OrderSummary() {
           Confirmacion de pedido
         </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
           {/* Left Column - Summary Box */}
           <div>
             <div className="bg-[#F7FAFC] border-3 border-artra-dark-navy rounded-2xl p-6">

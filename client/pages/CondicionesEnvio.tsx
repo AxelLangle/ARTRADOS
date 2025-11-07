@@ -54,7 +54,21 @@ export default function PoliticasEnvio() {
                       </li>
                     </ul>
                 </ol>
-    
+
+            <div className="flex gap-4 justify-center">
+              <a
+                href="/"
+                className="px-8 py-3 bg-artra-blue hover:bg-artra-dark-navy transition-colors rounded-2xl text-white font-semibold"
+              >
+                Ir al Inicio
+              </a>
+              <a
+                href="/tienda"
+                className="px-8 py-3 border-2 border-artra-blue text-artra-navy hover:bg-artra-light-blue transition-colors rounded-2xl font-semibold"
+              >
+                Ver Tienda
+              </a>
+            </div>
                 <div className="mt-12 pt-8 border-t border-gray-200">
                   <Link
                     to="/"

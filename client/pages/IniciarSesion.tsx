@@ -1,18 +1,22 @@
 import { ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // No validation - just navigate
+    // No validation - just set logged and navigate
+    login();
     navigate("/");
   };
 
   const handleGoogleLogin = () => {
-    navigate("/login/google");
+    login();
+    navigate("/");
   };
 
   return (
