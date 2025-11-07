@@ -10,22 +10,25 @@ import { CartProvider } from "./contexts/CartContext";
 import { WishlistProvider } from "./contexts/WishlistContext";
 import { PaymentProvider } from "./contexts/PaymentContext";
 import { AddressProvider } from "./contexts/AddressContext";
-import Index from "./pages/Index";
+import Index from "./pages/Inicio";
 import Tienda from "./pages/Tienda";
-import ProductDetail from "./pages/ProductDetail";
+import ProductDetail from "./pages/DetallesProducto";
 import QuienEsArtra from "./pages/QuienEsArtra";
-import Wishlist from "./pages/Wishlist";
-import Cart from "./pages/Cart";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
+import ListaDeseos from "./pages/ListaDeseos";
+import Cart from "./pages/Carrito";
+import Login from "./pages/IniciarSesion";
+import SignUp from "./pages/CrearCuenta";
 import ForgotPassword from "./pages/ForgotPassword";
 import GoogleLogin from "./pages/GoogleLogin";
-import SelectPaymentMethod from "./pages/SelectPaymentMethod";
-import AddCardForm from "./pages/AddCardForm";
-import SelectAddress from "./pages/SelectAddress";
-import OrderSummary from "./pages/OrderSummary";
+import SelectPaymentMethod from "./pages/SeleccionaMetodoPago";
+import AddCardForm from "./pages/FormularioAgregarTarjeta";
+import SelectAddress from "./pages/SeleccionarDireccion";
+import OrderSummary from "./pages/ResumenPedido";
 import Placeholder from "./pages/Placeholder";
-import NotFound from "./pages/NotFound";
+import NotFound from "./pages/Error404";
+import TerminosDeUso from "./pages/TerminosDeUso";
+import CondicionesEnvio from "./pages/CondicionesEnvio";
+import AvisoPrivacidad from "./pages/PoliticasPrivacidad";
 
 const queryClient = new QueryClient();
 
@@ -44,7 +47,7 @@ const App = () => (
               <Route path="/tienda" element={<Tienda />} />
               <Route path="/producto/:id" element={<ProductDetail />} />
               <Route path="/quien-es-artra" element={<QuienEsArtra />} />
-              <Route path="/favoritos" element={<Wishlist />} />
+              <Route path="/favoritos" element={<ListaDeseos />} />
               <Route path="/carrito" element={<Cart />} />
               <Route path="/checkout/payment" element={<SelectPaymentMethod />} />
               <Route path="/checkout/add-card" element={<AddCardForm />} />
@@ -53,25 +56,10 @@ const App = () => (
               <Route path="/login" element={<Login />} />
               <Route path="/crear-cuenta" element={<SignUp />} />
               <Route path="/recuperar-contraseña" element={<ForgotPassword />} />
-              <Route path="/login/google" element={<GoogleLogin />} />
-              <Route
-                path="/terminos"
-                element={
-                  <Placeholder
-                    title="Términos y Condiciones de Uso - ARTRA"
-                    message="Consulta nuestros términos y condiciones para conocer más sobre cómo funciona ARTRA."
-                  />
-                }
-              />
-              <Route
-                path="/privacidad"
-                element={
-                  <Placeholder
-                    title="Políticas de Privacidad"
-                    message="Tu privacidad es importante para nosotros. Conoce cómo protegemos tu información."
-                  />
-                }
-              />
+              <Route path="/terminos" element={<TerminosDeUso />} />
+              <Route path="/condicionesEnvio" element={<CondicionesEnvio />} />
+              <Route path="/privacidad" element={<AvisoPrivacidad />} />
+
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
                 </Routes>

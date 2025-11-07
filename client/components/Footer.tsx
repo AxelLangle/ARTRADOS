@@ -14,13 +14,20 @@ export default function Footer() {
               className="text-artra-lighter-blue text-base font-semibold hover:text-white transition-colors"
             >
               Términos de uso
+            </Link>           
+            <Link
+              to="/condicionesEnvio"
+              className="text-artra-lighter-blue text-base font-semibold hover:text-white transition-colors"
+            >
+              Politicas de Envio y Condiciones
             </Link>
             <Link
               to="/privacidad"
               className="text-artra-lighter-blue text-base font-semibold hover:text-white transition-colors"
             >
-              Políticas de privacidad
+              Aviso de privacidad
             </Link>
+
           </div>
         </div>
       </div>

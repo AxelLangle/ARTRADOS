@@ -4,7 +4,7 @@ import Layout from "@/components/Layout";
 import { useWishlist } from "@/contexts/WishlistContext";
 import { useCart } from "@/contexts/CartContext";
 
-export default function Wishlist() {
+export default function ListaDeseos() {
   const { items, removeFromWishlist } = useWishlist();
   const { addToCart } = useCart();
 
