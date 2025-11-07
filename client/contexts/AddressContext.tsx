@@ -7,13 +7,23 @@ export interface Address {
   city: string;
   state: string;
   postalCode: string;
+  municipality?: string;
+  locality?: string;
+  colony?: string;
+  interiorNumber?: string;
+  deliveryInstructions?: string;
+  addressType?: "residential" | "commercial";
+  fullName?: string;
+  phoneNumber?: string;
 }
 
 interface AddressContextType {
   addresses: Address[];
   selectedAddress: Address | null;
   addAddress: (address: Omit<Address, "id">) => void;
+  updateAddress: (id: string, address: Partial<Address>) => void;
   selectAddress: (id: string) => void;
+  getAddressById: (id: string) => Address | undefined;
 }
 
 const AddressContext = createContext<AddressContextType | undefined>(undefined);
@@ -48,11 +58,26 @@ export function AddressProvider({ children }: { children: ReactNode }) {
     setSelectedAddress(newAddress);
   };
 
+  const updateAddress = (id: string, updatedData: Partial<Address>) => {
+    setAddresses(
+      addresses.map((addr) =>
+        addr.id === id ? { ...addr, ...updatedData } : addr
+      )
+    );
+    if (selectedAddress?.id === id) {
+      setSelectedAddress({ ...selectedAddress, ...updatedData });
+    }
+  };
+
   const selectAddress = (id: string) => {
     const address = addresses.find((a) => a.id === id);
     if (address) {
       setSelectedAddress(address);
     }
+  };
+
+  const getAddressById = (id: string) => {
+    return addresses.find((a) => a.id === id);
   };
 
   return (
@@ -61,7 +86,9 @@ export function AddressProvider({ children }: { children: ReactNode }) {
         addresses,
         selectedAddress,
         addAddress,
+        updateAddress,
         selectAddress,
+        getAddressById,
       }}
     >
       {children}

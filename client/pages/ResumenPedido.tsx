@@ -1,19 +1,98 @@
+import { useState } from "react";
 import { Edit, MapPin, Image as ImageIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { useCart } from "@/contexts/CartContext";
 import { usePayment } from "@/contexts/PaymentContext";
 import { useAddress } from "@/contexts/AddressContext";
+import ProductListModal from "@/components/modals/ProductListModal";
+import AddressSelectionModal from "@/components/modals/AddressSelectionModal";
+import AddressFormModal from "@/components/modals/AddressFormModal";
 
 export default function OrderSummary() {
   const navigate = useNavigate();
   const { items, total } = useCart();
   const { selectedPaymentMethod } = usePayment();
-  const { selectedAddress } = useAddress();
+  const { selectedAddress, addAddress, updateAddress, getAddressById } = useAddress();
+  const [showProductList, setShowProductList] = useState(false);
+  const [showAddressSelection, setShowAddressSelection] = useState(false);
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
 
   const handleConfirm = () => {
     alert("¡Compra confirmada! Gracias por tu compra.");
     navigate("/");
+  };
+
+  const handleAddNewAddress = () => {
+    setEditingAddressId(null);
+    setShowAddressSelection(false);
+    setShowAddressForm(true);
+  };
+
+  const handleEditAddress = (addressId: string) => {
+    setEditingAddressId(addressId);
+    setShowAddressSelection(false);
+    setShowAddressForm(true);
+  };
+
+  const handleSaveAddress = (formData: any) => {
+    if (editingAddressId) {
+      // Update existing address
+      updateAddress(editingAddressId, {
+        street: formData.street,
+        state: formData.state,
+        postalCode: formData.postalCode,
+        municipality: formData.municipality,
+        locality: formData.locality,
+        colony: formData.colony,
+        interiorNumber: formData.interiorNumber,
+        deliveryInstructions: formData.deliveryInstructions,
+        addressType: formData.addressType,
+        fullName: formData.fullName,
+        phoneNumber: formData.phoneNumber,
+        name: formData.fullName || "Dirección",
+        city: formData.locality || "",
+      });
+    } else {
+      // Add new address
+      addAddress({
+        name: formData.fullName || "Nueva Dirección",
+        street: formData.street,
+        city: formData.locality || "",
+        state: formData.state,
+        postalCode: formData.postalCode,
+        municipality: formData.municipality,
+        locality: formData.locality,
+        colony: formData.colony,
+        interiorNumber: formData.interiorNumber,
+        deliveryInstructions: formData.deliveryInstructions,
+        addressType: formData.addressType,
+        fullName: formData.fullName,
+        phoneNumber: formData.phoneNumber,
+      });
+    }
+    setShowAddressForm(false);
+    setEditingAddressId(null);
+  };
+
+  const getAddressFormInitialData = () => {
+    if (!editingAddressId) return undefined;
+    const address = getAddressById(editingAddressId);
+    if (!address) return undefined;
+    return {
+      street: address.street,
+      postalCode: address.postalCode,
+      state: address.state,
+      municipality: address.municipality,
+      locality: address.locality,
+      colony: address.colony,
+      interiorNumber: address.interiorNumber,
+      deliveryInstructions: address.deliveryInstructions,
+      addressType: address.addressType,
+      fullName: address.fullName,
+      phoneNumber: address.phoneNumber,
+    };
   };
 
   return (
@@ -102,7 +181,7 @@ export default function OrderSummary() {
                 </div>
                 <div className="border-t border-[#7D7979] mt-6 pt-6">
                   <button
-                    onClick={() => navigate("/checkout/address")}
+                    onClick={() => setShowAddressSelection(true)}
                     className="flex items-center gap-3 text-[#1F2F74] hover:text-[#4569AD] transition-colors"
                   >
                     <Edit className="w-[30px] h-[30px]" strokeWidth={4} />
@@ -127,7 +206,10 @@ export default function OrderSummary() {
                   <p className="text-[#4569AD] text-[28px] font-semibold mb-2">
                     Llega en 3 días a tu domicilio
                   </p>
-                  <button className="text-[#081F44] text-xl font-medium hover:text-[#4569AD] transition-colors">
+                  <button
+                    onClick={() => setShowProductList(true)}
+                    className="text-[#081F44] text-xl font-medium hover:text-[#4569AD] transition-colors"
+                  >
                     Mostrar productos
                   </button>
                 </div>
@@ -177,6 +259,28 @@ export default function OrderSummary() {
           </div>
         </div>
       </div>
+
+      {/* Modals */}
+      <ProductListModal
+        isOpen={showProductList}
+        onClose={() => setShowProductList(false)}
+      />
+      <AddressSelectionModal
+        isOpen={showAddressSelection}
+        onClose={() => setShowAddressSelection(false)}
+        onAddNew={handleAddNewAddress}
+        onEdit={handleEditAddress}
+      />
+      <AddressFormModal
+        isOpen={showAddressForm}
+        onClose={() => {
+          setShowAddressForm(false);
+          setEditingAddressId(null);
+        }}
+        onSave={handleSaveAddress}
+        initialData={getAddressFormInitialData()}
+        mode={editingAddressId ? "edit" : "add"}
+      />
     </Layout>
   );
 }
