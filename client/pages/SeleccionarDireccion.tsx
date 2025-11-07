@@ -1,16 +1,89 @@
+import { useState } from "react";
 import { ArrowLeft, ArrowRight, Edit } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { useAddress } from "@/contexts/AddressContext";
+import AddressFormModal from "@/components/modals/AddressFormModal";
 
 export default function SelectAddress() {
   const navigate = useNavigate();
-  const { addresses, selectedAddress, selectAddress } = useAddress();
+  const { addresses, selectedAddress, selectAddress, addAddress, updateAddress, getAddressById } = useAddress();
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
 
   const handleNext = () => {
     if (selectedAddress) {
       navigate("/checkout/summary");
     }
+  };
+
+  const handleAddNewAddress = () => {
+    setEditingAddressId(null);
+    setShowAddressForm(true);
+  };
+
+  const handleEditAddress = (addressId: string) => {
+    setEditingAddressId(addressId);
+    setShowAddressForm(true);
+  };
+
+  const handleSaveAddress = (formData: any) => {
+    if (editingAddressId) {
+      // Update existing address
+      updateAddress(editingAddressId, {
+        street: formData.street,
+        state: formData.state,
+        postalCode: formData.postalCode,
+        municipality: formData.municipality,
+        locality: formData.locality,
+        colony: formData.colony,
+        interiorNumber: formData.interiorNumber,
+        deliveryInstructions: formData.deliveryInstructions,
+        addressType: formData.addressType,
+        fullName: formData.fullName,
+        phoneNumber: formData.phoneNumber,
+        name: formData.fullName || "Dirección",
+        city: formData.locality || "",
+      });
+    } else {
+      // Add new address
+      addAddress({
+        name: formData.fullName || "Nueva Dirección",
+        street: formData.street,
+        city: formData.locality || "",
+        state: formData.state,
+        postalCode: formData.postalCode,
+        municipality: formData.municipality,
+        locality: formData.locality,
+        colony: formData.colony,
+        interiorNumber: formData.interiorNumber,
+        deliveryInstructions: formData.deliveryInstructions,
+        addressType: formData.addressType,
+        fullName: formData.fullName,
+        phoneNumber: formData.phoneNumber,
+      });
+    }
+    setShowAddressForm(false);
+    setEditingAddressId(null);
+  };
+
+  const getAddressFormInitialData = () => {
+    if (!editingAddressId) return undefined;
+    const address = getAddressById(editingAddressId);
+    if (!address) return undefined;
+    return {
+      street: address.street,
+      postalCode: address.postalCode,
+      state: address.state,
+      municipality: address.municipality,
+      locality: address.locality,
+      colony: address.colony,
+      interiorNumber: address.interiorNumber,
+      deliveryInstructions: address.deliveryInstructions,
+      addressType: address.addressType,
+      fullName: address.fullName,
+      phoneNumber: address.phoneNumber,
+    };
   };
 
   return (
@@ -49,7 +122,10 @@ export default function SelectAddress() {
                         {address.postalCode}
                       </p>
                     </button>
-                    <button className="flex items-center gap-2 text-[#14366D] hover:text-[#4569AD] transition-colors flex-shrink-0">
+                    <button
+                      onClick={() => handleEditAddress(address.id)}
+                      className="flex items-center gap-2 text-[#14366D] hover:text-[#4569AD] transition-colors flex-shrink-0"
+                    >
                       <Edit className="w-[30px] h-[30px]" strokeWidth={4} />
                       <span className="text-xl font-bold">Editar</span>
                     </button>
@@ -60,7 +136,10 @@ export default function SelectAddress() {
 
             {/* Add New Address Button */}
             <div className="flex justify-end mt-8">
-              <button className="px-6 py-[23px] rounded-2xl bg-[#14366D] hover:bg-[#1F2F74] transition-colors h-[68px]">
+              <button
+                onClick={handleAddNewAddress}
+                className="px-6 py-[23px] rounded-2xl bg-[#14366D] hover:bg-[#1F2F74] transition-colors h-[68px]"
+              >
                 <span className="text-white text-lg font-bold leading-[21px]">
                   Agregar nueva dirección
                 </span>
@@ -90,6 +169,18 @@ export default function SelectAddress() {
           <span className="text-[25px] font-normal">Volver</span>
         </Link>
       </div>
+
+      {/* Address Form Modal */}
+      <AddressFormModal
+        isOpen={showAddressForm}
+        onClose={() => {
+          setShowAddressForm(false);
+          setEditingAddressId(null);
+        }}
+        onSave={handleSaveAddress}
+        initialData={getAddressFormInitialData()}
+        mode={editingAddressId ? "edit" : "add"}
+      />
     </Layout>
   );
 }
