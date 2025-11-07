@@ -61,8 +61,8 @@ export function AddressProvider({ children }: { children: ReactNode }) {
   const updateAddress = (id: string, updatedData: Partial<Address>) => {
     setAddresses(
       addresses.map((addr) =>
-        addr.id === id ? { ...addr, ...updatedData } : addr
-      )
+        addr.id === id ? { ...addr, ...updatedData } : addr,
+      ),
     );
     if (selectedAddress?.id === id) {
       setSelectedAddress({ ...selectedAddress, ...updatedData });

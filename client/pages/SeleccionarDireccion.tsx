@@ -7,7 +7,14 @@ import AddressFormModal from "@/components/modals/AddressFormModal";
 
 export default function SelectAddress() {
   const navigate = useNavigate();
-  const { addresses, selectedAddress, selectAddress, addAddress, updateAddress, getAddressById } = useAddress();
+  const {
+    addresses,
+    selectedAddress,
+    selectAddress,
+    addAddress,
+    updateAddress,
+    getAddressById,
+  } = useAddress();
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
 

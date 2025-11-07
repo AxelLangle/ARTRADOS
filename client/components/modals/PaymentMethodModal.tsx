@@ -15,9 +15,7 @@ export default function PaymentMethodModal({
 }: PaymentMethodModalProps) {
   const { paymentMethods, selectedPaymentMethod, selectPaymentMethod } =
     usePayment();
-  const [selectedId, setSelectedId] = useState(
-    selectedPaymentMethod?.id || ""
-  );
+  const [selectedId, setSelectedId] = useState(selectedPaymentMethod?.id || "");
 
   const handleSelectAndContinue = () => {
     if (selectedId) {

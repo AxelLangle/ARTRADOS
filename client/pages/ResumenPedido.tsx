@@ -13,7 +13,8 @@ export default function OrderSummary() {
   const navigate = useNavigate();
   const { items, total } = useCart();
   const { selectedPaymentMethod } = usePayment();
-  const { selectedAddress, addAddress, updateAddress, getAddressById } = useAddress();
+  const { selectedAddress, addAddress, updateAddress, getAddressById } =
+    useAddress();
   const [showProductList, setShowProductList] = useState(false);
   const [showAddressSelection, setShowAddressSelection] = useState(false);
   const [showAddressForm, setShowAddressForm] = useState(false);
