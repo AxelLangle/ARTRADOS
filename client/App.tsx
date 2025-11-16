@@ -25,6 +25,9 @@ import SelectPaymentMethod from "./pages/SeleccionaMetodoPago";
 import AddCardForm from "./pages/FormularioAgregarTarjeta";
 import SelectAddress from "./pages/SeleccionarDireccion";
 import OrderSummary from "./pages/ResumenPedido";
+import MiCuenta from "./pages/MiCuenta";
+import MisCompras from "./pages/MisCompras";
+import RastrearPedido from "./pages/RastrearPedido";
 import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/Error404";
 import TerminosDeUso from "./pages/TerminosDeUso";
@@ -55,6 +58,9 @@ const App = () => (
               <Route path="/checkout/add-card" element={<AddCardForm />} />
               <Route path="/checkout/address" element={<SelectAddress />} />
               <Route path="/checkout/summary" element={<OrderSummary />} />
+              <Route path="/mi-cuenta" element={<MiCuenta />} />
+              <Route path="/mis-compras" element={<MisCompras />} />
+              <Route path="/rastrear-pedido/:id" element={<RastrearPedido />} />
               <Route path="/login" element={<Login />} />
               <Route path="/crear-cuenta" element={<SignUp />} />
               <Route path="/recuperar-contraseña" element={<ForgotPassword />} />

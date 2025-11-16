@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    allowedHosts: ["8080-ik7p37gfj0sww4yh3lla7-2152898f.manus.computer", "8081-ik7p37gfj0sww4yh3lla7-2152898f.manus.computer"],
     fs: {
       allow: ["./client", "./shared", searchForWorkspaceRoot(process.cwd())],
       deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],

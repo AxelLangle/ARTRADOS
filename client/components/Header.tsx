@@ -53,7 +53,7 @@ export default function Header() {
         </div>
 
         {/* Navegación (movida cerca del logo o integrada) */}
-        <nav className="flex items-center gap-4 ml-8"> {/* Añadido margen */}
+        <nav className="hidden md:flex items-center gap-4 ml-8"> {/* Añadido margen */}
           <Link
             to="/"
             className={NAV_LINK} // Reducido tamaño
@@ -75,9 +75,9 @@ export default function Header() {
         </nav>
 
         {/* Search Bar e Iconos (agrupados a la derecha) */}
-        <div className="flex items-center gap-4 flex-1 justify-center"> {/* Flex-1 y justify-center */}
+        <div className="flex items-center gap-2 md:gap-4 flex-1 justify-center"> {/* Flex-1 y justify-center */}
           {/* Search Bar */}
-          <div className="flex-1 max-w-[700px]"> {/* Reducido max-w */}
+          <div className="hidden sm:flex flex-1 max-w-[700px]"> {/* Reducido max-w */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" /> {/* Ajustado icono */}
               <input
@@ -90,7 +90,7 @@ export default function Header() {
           </div>
 
           {/* Icons */}
-          <div className="flex items-center gap-2"> {/* Reducido gap */}
+          <div className="flex items-center gap-1 md:gap-2"> {/* Reducido gap */}
             {/* Reducido tamaño de botones/iconos */}
             <Link to="/favoritos" className={ICON_BUTTON}>
               <Heart className={ICON_NAVY_24} />

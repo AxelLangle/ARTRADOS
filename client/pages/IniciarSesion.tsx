@@ -1,22 +1,45 @@
 import { ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Layout from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { toast } = useToast();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // No validation - just set logged and navigate
-    login();
-    navigate("/");
+    const success = login(email, password);
+    if (success) {
+      toast({
+        title: "¡Bienvenido!",
+        description: "Has iniciado sesión correctamente.",
+      });
+      navigate("/");
+    } else {
+      toast({
+        title: "Error",
+        description: "Correo o contraseña incorrectos. Intenta con: axellangle40@gmail.com / 123456",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleGoogleLogin = () => {
-    login();
-    navigate("/");
+    // Simular login con Google usando el primer usuario
+    const success = login("axellangle40@gmail.com", "123456");
+    if (success) {
+      toast({
+        title: "¡Bienvenido!",
+        description: "Has iniciado sesión con Google.",
+      });
+      navigate("/");
+    }
   };
 
   return (
@@ -46,6 +69,9 @@ export default function Login() {
               <input
                 type="email"
                 placeholder="Ingresa tu correo electrónico"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
                 className="w-full h-14 px-4 rounded-lg border border-artra-lighter-blue/30 bg-artra-light-bg text-artra-blue placeholder:text-artra-blue/60 focus:outline-none focus:ring-2 focus:ring-artra-blue"
               />
             </div>
@@ -58,6 +84,9 @@ export default function Login() {
               <input
                 type="password"
                 placeholder="Ingresa tu contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
                 className="w-full h-14 px-4 rounded-lg border border-artra-lighter-blue/30 bg-artra-light-bg text-artra-blue placeholder:text-artra-blue/60 focus:outline-none focus:ring-2 focus:ring-artra-blue"
               />
             </div>

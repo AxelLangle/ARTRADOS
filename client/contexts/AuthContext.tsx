@@ -1,38 +1,73 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { User, validateCredentials, getUserById } from "@/data/mockUsers";
 
 type AuthContextType = {
   isLogged: boolean;
-  login: () => void;
+  user: User | null;
+  login: (email: string, password: string) => boolean;
   logout: () => void;
+  updateUser: (updates: Partial<User>) => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isLogged, setIsLogged] = useState<boolean>(() => {
+  const [user, setUser] = useState<User | null>(() => {
     try {
-      const stored = localStorage.getItem("artra:isLogged");
-      return stored === "true";
+      const stored = localStorage.getItem("artra:user");
+      if (stored) {
+        const userData = JSON.parse(stored);
+        return getUserById(userData.id) || null;
+      }
+      return null;
     } catch {
-      return false;
+      return null;
     }
   });
 
+  const isLogged = user !== null;
+
   useEffect(() => {
     try {
-      localStorage.setItem("artra:isLogged", String(isLogged));
+      if (user) {
+        localStorage.setItem("artra:user", JSON.stringify(user));
+      } else {
+        localStorage.removeItem("artra:user");
+      }
     } catch {
       // ignore
     }
-  }, [isLogged]);
+  }, [user]);
+
+  const login = (email: string, password: string): boolean => {
+    const validatedUser = validateCredentials(email, password);
+    if (validatedUser) {
+      setUser(validatedUser);
+      return true;
+    }
+    return false;
+  };
+
+  const logout = () => {
+    setUser(null);
+  };
+
+  const updateUser = (updates: Partial<User>) => {
+    if (user) {
+      const updatedUser = { ...user, ...updates };
+      setUser(updatedUser);
+    }
+  };
 
   const value = useMemo(
     () => ({
       isLogged,
-      login: () => setIsLogged(true),
-      logout: () => setIsLogged(false),
+      user,
+      login,
+      logout,
+      updateUser,
     }),
-    [isLogged]
+    [isLogged, user]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

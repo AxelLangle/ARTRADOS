@@ -111,4 +111,53 @@
   .text-artra-dark-navy {
     color: hsl(var(--artra-dark-navy));
   }
+  .border-artra-blue {
+    border-color: hsl(var(--artra-blue));
+  }
+  .border-artra-lighter-blue {
+    border-color: hsl(var(--artra-lighter-blue));
+  }
+  .ring-artra-blue {
+    --tw-ring-color: hsl(var(--artra-blue));
+  }
+}
+
+/* Tipografía normalizada */
+@layer components {
+  .heading-1 {
+    @apply text-4xl font-bold text-artra-navy;
+  }
+  .heading-2 {
+    @apply text-3xl font-bold text-artra-navy;
+  }
+  .heading-3 {
+    @apply text-2xl font-bold text-artra-navy;
+  }
+  .heading-4 {
+    @apply text-xl font-semibold text-artra-navy;
+  }
+  .body-large {
+    @apply text-lg text-black;
+  }
+  .body-base {
+    @apply text-base text-black;
+  }
+  .body-small {
+    @apply text-sm text-gray-600;
+  }
+  .label {
+    @apply text-sm font-medium text-artra-blue;
+  }
+  .btn-primary {
+    @apply px-6 py-3 bg-artra-navy text-white rounded-xl hover:bg-artra-blue transition-colors font-semibold;
+  }
+  .btn-secondary {
+    @apply px-6 py-3 bg-artra-lighter-blue/30 text-artra-navy rounded-xl hover:bg-artra-lighter-blue/50 transition-colors font-medium;
+  }
+  .input-field {
+    @apply w-full h-12 px-4 rounded-lg border border-artra-lighter-blue bg-white focus:outline-none focus:ring-2 focus:ring-artra-blue;
+  }
+  .card {
+    @apply border-2 border-artra-blue rounded-2xl p-6;
+  }
 }
