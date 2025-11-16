@@ -2,9 +2,20 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import { initializeDatabase, seedDatabase } from "./db/schema";
+import authRoutes from "./routes/auth";
+import addressRoutes from "./routes/addresses";
+import productRoutes from "./routes/products";
+import categoryRoutes from "./routes/categories";
+import wishlistRoutes from "./routes/wishlist";
+import contactRoutes from "./routes/contact";
 
 export function createServer() {
   const app = express();
+
+  // Inicializar base de datos
+  initializeDatabase();
+  seedDatabase();
 
   // Middleware
   app.use(cors());
@@ -18,6 +29,19 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Rutas de la API
+  app.use("/api/auth", authRoutes);
+  app.use("/api/addresses", addressRoutes);
+  app.use("/api/products", productRoutes);
+  app.use("/api/categories", categoryRoutes);
+  app.use("/api/wishlist", wishlistRoutes);
+  app.use("/api/contact", contactRoutes);
+
+  // Health check
+  app.get("/api/health", (_req, res) => {
+    res.json({ status: "ok", message: "API de ARTRADOS funcionando correctamente" });
+  });
 
   return app;
 }

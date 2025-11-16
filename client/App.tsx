@@ -28,6 +28,9 @@ import OrderSummary from "./pages/ResumenPedido";
 import MiCuenta from "./pages/MiCuenta";
 import MisCompras from "./pages/MisCompras";
 import RastrearPedido from "./pages/RastrearPedido";
+import Ayuda from "./pages/Ayuda";
+import Contactanos from "./pages/Contactanos";
+import Admin from "./pages/Admin";
 import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/Error404";
 import TerminosDeUso from "./pages/TerminosDeUso";
@@ -61,6 +64,9 @@ const App = () => (
               <Route path="/mi-cuenta" element={<MiCuenta />} />
               <Route path="/mis-compras" element={<MisCompras />} />
               <Route path="/rastrear-pedido/:id" element={<RastrearPedido />} />
+              <Route path="/ayuda" element={<Ayuda />} />
+              <Route path="/contactanos" element={<Contactanos />} />
+              <Route path="/admin" element={<Admin />} />
               <Route path="/login" element={<Login />} />
               <Route path="/crear-cuenta" element={<SignUp />} />
               <Route path="/recuperar-contraseña" element={<ForgotPassword />} />
