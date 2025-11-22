@@ -17,7 +17,6 @@ interface Category {
   id: number;
   name: string;
   slug: string;
-  product_count: number;
 }
 
 export default function Tienda() {
@@ -38,7 +37,15 @@ export default function Tienda() {
   const loadCategories = async () => {
     try {
       const data = await categoriesAPI.getAll();
-      setCategories(data);
+      const allProducts = await productsAPI.getAll();
+      
+      // Contar productos por categoría
+      const categoriesWithCount = data.map(cat => ({
+        ...cat,
+        product_count: allProducts.filter(p => p.category_id === cat.id).length
+      }));
+      
+      setCategories(categoriesWithCount);
     } catch (error) {
       console.error('Error al cargar categorías:', error);
     }
@@ -105,20 +112,23 @@ export default function Tienda() {
                       />
                       <span className="body-base">Todas</span>
                     </label>
-                    {categories.map(category => (
-                      <label key={category.id} className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="category"
-                          checked={selectedCategory === category.slug}
-                          onChange={() => handleCategoryChange(category.slug)}
-                          className="text-navy"
-                        />
-                        <span className="body-base">
-                          {category.name} ({category.product_count})
-                        </span>
-                      </label>
-                    ))}
+                    {categories.map(category => {
+                      const count = (category as any).product_count || 0;
+                      return (
+                        <label key={category.id} className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="category"
+                            checked={selectedCategory === category.slug}
+                            onChange={() => handleCategoryChange(category.slug)}
+                            className="text-navy"
+                          />
+                          <span className="body-base">
+                            {category.name} ({count})
+                          </span>
+                        </label>
+                      );
+                    })}
                   </div>
                 </div>
 

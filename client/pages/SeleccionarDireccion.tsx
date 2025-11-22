@@ -1,11 +1,15 @@
-import { ArrowLeft, ArrowRight, Edit } from "lucide-react";
+import { useState } from 'react';
+import { ArrowLeft, ArrowRight, Edit, Plus } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { useAddress } from "@/contexts/AddressContext";
+import AddressFormModal from "@/components/AddressFormModal";
 
 export default function SelectAddress() {
   const navigate = useNavigate();
   const { addresses, selectedAddress, selectAddress } = useAddress();
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [editingAddress, setEditingAddress] = useState<any>(null);
 
   const handleNext = () => {
     if (selectedAddress) {
@@ -34,26 +38,30 @@ export default function SelectAddress() {
               {addresses.map((address, index) => (
                 <div
                   key={address.id}
-                  className={`bg-white rounded-xl p-6 ${
-                    index === 0 ? "border-[1.5px]" : "border-[1.5px]"
-                  } border-artra-navy`}
+                  onClick={() => selectAddress(address.id)}
+                  className={`bg-white rounded-xl p-6 border-2 cursor-pointer transition-all ${
+                    selectedAddress?.id === address.id
+                      ? "border-artra-blue bg-blue-50"
+                      : "border-gray-300 hover:border-artra-blue"
+                  }`}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <button
-                        onClick={() => selectAddress(address.id)}
-                        className="text-left w-full"
-                      >
-                        <p className="text-artra-blue text-[28px] font-bold mb-1">
-                          Dirección {index + 1}: {address.name}
-                        </p>
-                        <p className="text-black text-2xl leading-relaxed">
-                          {address.street}, {address.city}, {address.state}, C.P.{" "}
-                          {address.postalCode}
-                        </p>
-                      </button>
+                      <p className="text-artra-blue text-[28px] font-bold mb-1">
+                        {address.name}
+                      </p>
+                      <p className="text-black text-2xl leading-relaxed">
+                        {address.street}, {address.city}, {address.state}, C.P.{" "}
+                        {address.postal_code}
+                      </p>
                     </div>
-                    <button className="flex items-center gap-2 text-artra-navy hover:text-artra-blue transition-colors flex-shrink-0">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditingAddress(address);
+                      }}
+                      className="flex items-center gap-2 text-artra-navy hover:text-artra-blue transition-colors flex-shrink-0"
+                    >
                       <Edit className="w-7 h-7" strokeWidth={2.5} />
                       <span className="text-xl font-bold">Editar</span>
                     </button>
@@ -64,7 +72,11 @@ export default function SelectAddress() {
 
             {/* Add New Address Button */}
             <div className="flex justify-end mt-8">
-              <button className="px-6 py-4 rounded-2xl bg-artra-navy hover:bg-artra-dark-navy transition-colors">
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="px-6 py-4 rounded-2xl bg-artra-navy hover:bg-artra-dark-navy transition-colors flex items-center gap-2"
+              >
+                <Plus className="w-5 h-5" />
                 <span className="text-white text-lg font-bold">
                   Agregar nueva dirección
                 </span>
@@ -93,6 +105,21 @@ export default function SelectAddress() {
           <ArrowLeft className="w-6 h-6" />
           <span className="text-2xl">Volver</span>
         </Link>
+
+        {/* Modales */}
+        {showAddModal && (
+          <AddressFormModal
+            onClose={() => setShowAddModal(false)}
+            onSuccess={() => setShowAddModal(false)}
+          />
+        )}
+        {editingAddress && (
+          <AddressFormModal
+            address={editingAddress}
+            onClose={() => setEditingAddress(null)}
+            onSuccess={() => setEditingAddress(null)}
+          />
+        )}
       </div>
     </Layout>
   );

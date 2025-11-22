@@ -44,12 +44,14 @@ export default function Admin() {
   });
 
   useEffect(() => {
-    if (!user?.isAdmin) {
+    // Verificar si el usuario es admin
+    const userRole = localStorage.getItem('userRole');
+    if (userRole !== 'admin') {
       navigate('/');
       return;
     }
     loadData();
-  }, [user, navigate]);
+  }, [navigate]);
 
   const loadData = async () => {
     try {
@@ -281,7 +283,9 @@ export default function Admin() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3">{product.category_id}</td>
+                  <td className="px-4 py-3">
+                    {categories.find(c => c.id === product.category_id)?.name || 'Sin categoría'}
+                  </td>
                   <td className="px-4 py-3 text-right">${product.price.toFixed(2)}</td>
                   <td className="px-4 py-3 text-right">{product.stock}</td>
                   <td className="px-4 py-3 text-center">
