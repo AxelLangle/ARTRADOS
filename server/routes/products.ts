@@ -128,10 +128,10 @@ router.put('/:id', authenticate, requireAdmin, async (req: AuthRequest, res) => 
 
     db.prepare(`
       UPDATE products
-      SET name = ?, description = ?, price = ?, stock = ?, category_id = ?,
-          image_url = ?, video_url = ?, featured = ?, updated_at = CURRENT_TIMESTAMP
-      WHERE id = ?
-    `).run(name, description, price, stock, category_id, image_url, video_url, featured ? 1 : 0, productId);
+        SET name = ?, description = ?, price = ?, stock = ?, category_id = ?,
+            image_url = ?, video_url = ?, featured = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).run(name, description, price, stock, category_id, image_url, video_url, featured ? 1 : 0, productId);
 
     // Regenerar QR si cambió el video_url
     if (video_url && video_url !== existing.video_url) {

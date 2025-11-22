@@ -152,7 +152,7 @@
     @apply px-6 py-3 bg-artra-navy text-white rounded-xl hover:bg-artra-blue transition-colors font-semibold;
   }
   .btn-secondary {
-    @apply px-6 py-3 bg-artra-lighter-blue/30 text-artra-navy rounded-xl hover:bg-artra-lighter-blue/50 transition-colors font-medium;
+    @apply px-6 py-3 bg-opacity-30 bg-artra-lighter-blue text-artra-navy rounded-xl hover:bg-opacity-50 transition-colors font-medium;
   }
   .input-field {
     @apply w-full h-12 px-4 rounded-lg border border-artra-lighter-blue bg-white focus:outline-none focus:ring-2 focus:ring-artra-blue;

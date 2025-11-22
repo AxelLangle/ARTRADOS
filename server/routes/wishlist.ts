@@ -155,10 +155,15 @@ router.post('/lists/:id/items', (req: AuthRequest, res) => {
 });
 
 // Eliminar producto de lista
-router.delete('/lists/:listId/items/:productId', (req: AuthRequest, res) => {
+router.delete('/lists/:listId/items', (req: AuthRequest, res) => {
   try {
     const userId = req.user!.userId;
-    const { listId, productId } = req.params;
+    const listId = req.params.listId;
+    const { productId } = req.query; // Usar query parameter para el producto
+
+    if (!productId) {
+      return res.status(400).json({ error: 'Falta el ID del producto' });
+    }
 
     // Verificar que la lista pertenece al usuario
     const list = db.prepare(`
