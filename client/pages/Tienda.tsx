@@ -24,6 +24,7 @@ export default function Tienda() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export default function Tienda() {
 
   useEffect(() => {
     loadProducts();
-  }, [selectedCategory, searchQuery]);
+  }, [selectedCategory, searchQuery, priceRange]);
 
   const loadCategories = async () => {
     try {
@@ -58,7 +59,9 @@ export default function Tienda() {
       if (selectedCategory) filters.category = selectedCategory;
       if (searchQuery) filters.search = searchQuery;
       
-      const data = await productsAPI.getAll(filters);
+      let data = await productsAPI.getAll(filters);
+      // Filtrar por precio
+      data = data.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1]);
       setProducts(data);
     } catch (error) {
       console.error('Error al cargar productos:', error);
@@ -132,12 +135,42 @@ export default function Tienda() {
                   </div>
                 </div>
 
+                {/* Precio */}
+                <div className="mb-6">
+                  <h3 className="font-semibold text-navy mb-3">Precio</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-sm text-gray-600">Mínimo: ${priceRange[0]}</label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="1000"
+                        value={priceRange[0]}
+                        onChange={(e) => setPriceRange([parseInt(e.target.value), priceRange[1]])}
+                        className="w-full"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm text-gray-600">Máximo: ${priceRange[1]}</label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="1000"
+                        value={priceRange[1]}
+                        onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 {/* Limpiar filtros */}
-                {(selectedCategory || searchQuery) && (
+                {(selectedCategory || searchQuery || priceRange[0] !== 0 || priceRange[1] !== 1000) && (
                   <button
                     onClick={() => {
                       setSelectedCategory('');
                       setSearchQuery('');
+                      setPriceRange([0, 1000]);
                     }}
                     className="btn-secondary w-full"
                   >
