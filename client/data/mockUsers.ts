@@ -6,6 +6,7 @@ export interface User {
   name: string;
   phone: string;
   avatar?: string;
+  isAdmin?: boolean;
 }
 
 export interface Address {
@@ -27,6 +28,7 @@ export const mockUsers: User[] = [
     name: "Axel Langle",
     phone: "(558) 259-4361",
     avatar: undefined,
+    isAdmin: false,
   },
   {
     id: "2",
@@ -35,6 +37,7 @@ export const mockUsers: User[] = [
     name: "María García",
     phone: "(555) 123-4567",
     avatar: undefined,
+    isAdmin: false,
   },
   {
     id: "3",
@@ -43,6 +46,16 @@ export const mockUsers: User[] = [
     name: "Juan Pérez",
     phone: "(555) 987-6543",
     avatar: undefined,
+    isAdmin: false,
+  },
+  {
+    id: "admin-1",
+    email: "admin@artrados.com",
+    password: "admin123",
+    name: "Administrador ARTRADOS",
+    phone: "(555) 000-0000",
+    avatar: undefined,
+    isAdmin: true,
   },
 ];
 
@@ -101,6 +114,12 @@ export function getUserById(id: string): User | undefined {
 export function validateCredentials(email: string, password: string): User | null {
   const user = getUserByEmail(email);
   if (user && user.password === password) {
+    // Guardar rol de admin en localStorage para verificación rápida
+    if (user.isAdmin) {
+      localStorage.setItem('userRole', 'admin');
+    } else {
+      localStorage.setItem('userRole', 'user');
+    }
     return user;
   }
   return null;

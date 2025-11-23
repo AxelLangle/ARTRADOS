@@ -46,12 +46,30 @@ export default function Admin() {
   useEffect(() => {
     // Verificar si el usuario es admin
     const userRole = localStorage.getItem('userRole');
-    if (userRole !== 'admin') {
+    const storedUser = localStorage.getItem('artra:user');
+    
+    if (userRole !== 'admin' && !storedUser) {
       navigate('/');
       return;
     }
+    
+    // Si el usuario está logueado, verificar que sea admin
+    if (storedUser) {
+      try {
+        const userData = JSON.parse(storedUser);
+        if (!userData.isAdmin) {
+          navigate('/');
+          return;
+        }
+      } catch {
+        navigate('/');
+        return;
+      }
+    }
+    
     loadData();
   }, [navigate]);
+
 
   const loadData = async () => {
     try {
