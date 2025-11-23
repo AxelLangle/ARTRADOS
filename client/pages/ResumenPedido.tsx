@@ -224,7 +224,11 @@ export default function OrderSummary() {
             <div className="space-y-4">
               {items.map((item, idx) => (
                 <div key={idx} className="flex gap-4 pb-4 border-b">
-                  <div className="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0"></div>
+                  <img
+                    src={item.image || '/api/placeholder/64/64'}
+                    alt={item.name}
+                    className="w-16 h-16 rounded-lg flex-shrink-0 object-cover"
+                  />
                   <div className="flex-1">
                     <p className="font-bold text-gray-800">{item.name}</p>
                     <p className="text-sm text-gray-600">Cantidad: {item.quantity}</p>
