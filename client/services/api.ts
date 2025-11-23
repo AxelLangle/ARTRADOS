@@ -1,8 +1,32 @@
 // Simulación robusta de API para el frontend
 // Este archivo simula las respuestas del backend hasta que se implemente el backend real
 
+// Funciones de persistencia de datos
+const persistData = () => {
+  localStorage.setItem('mockUsers', JSON.stringify(mockUsers));
+  localStorage.setItem('mockProducts', JSON.stringify(mockProducts));
+  localStorage.setItem('mockOrders', JSON.stringify(mockOrders));
+  localStorage.setItem('mockAddresses', JSON.stringify(mockAddresses));
+  localStorage.setItem('mockWishlists', JSON.stringify(mockWishlists));
+};
+
+// Inicializar datos si no existen en localStorage
+const initializeData = () => {
+  const storedUsers = localStorage.getItem('mockUsers');
+  const storedProducts = localStorage.getItem('mockProducts');
+  const storedOrders = localStorage.getItem('mockOrders');
+  const storedAddresses = localStorage.getItem('mockAddresses');
+  const storedWishlists = localStorage.getItem('mockWishlists');
+
+  if (storedUsers) mockUsers = JSON.parse(storedUsers);
+  if (storedProducts) mockProducts = JSON.parse(storedProducts);
+  if (storedOrders) mockOrders = JSON.parse(storedOrders);
+  if (storedAddresses) mockAddresses = JSON.parse(storedAddresses);
+  if (storedWishlists) mockWishlists = JSON.parse(storedWishlists);
+};
+
 // Datos simulados
-const mockUsers = [
+let mockUsers = [
   {
     id: 1,
     name: 'Axel Langle',
@@ -182,6 +206,8 @@ let mockWishlists = [
   }
 ];
 
+initializeData(); // Llamar a la inicialización después de definir los mocks iniciales
+
 // Simular delay de red
 function simulateDelay(ms = 300) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -359,15 +385,25 @@ export const productsAPI = {
     return mockResponse(product);
   },
 
-  create: async (product: any) => {
+  addProduct: async (productData: {
+    name: string;
+    description: string;
+    price: number;
+    category_id: number;
+    image: string;
+    stock: number;
+    video_url: string | null;
+  }) => {
+    await simulateDelay(500);
+    
     const newProduct = {
       id: Math.max(...mockProducts.map(p => p.id), 0) + 1,
-      ...product,
-      featured: product.featured || false,
-      stock: product.stock || 0
+      ...productData,
+      featured: false, // Por defecto, no destacado
     };
 
     mockProducts.push(newProduct);
+    persistData(); // Persistir los cambios en localStorage
     return mockResponse(newProduct);
   },
 
@@ -376,6 +412,7 @@ export const productsAPI = {
     if (index === -1) throw new Error('Producto no encontrado');
 
     mockProducts[index] = { ...mockProducts[index], ...product };
+    persistData(); // Persistir los cambios en localStorage
     return mockResponse(mockProducts[index]);
   },
 
@@ -384,6 +421,7 @@ export const productsAPI = {
     if (index === -1) throw new Error('Producto no encontrado');
 
     mockProducts.splice(index, 1);
+    persistData(); // Persistir los cambios en localStorage
     return mockResponse({ success: true });
   }
 };

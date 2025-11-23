@@ -14,10 +14,20 @@ import {
 } from "@/components/styles/headerClasses";
 
 export default function Header() {
-  const { items: cartItems } = useCart();
-  const { items: wishlistItems } = useWishlist();
-
-  return (
+	  const { items: cartItems } = useCart();
+	  const { items: wishlistItems } = useWishlist();
+	  const [searchQuery, setSearchQuery] = useState(''); // Añadir estado para la búsqueda
+	
+	  // Función de búsqueda simulada (solo para evitar errores, la funcionalidad real
+	  // se implementaría con React Router o un contexto de búsqueda)
+	  const handleSearch = (e: React.FormEvent) => {
+	    e.preventDefault();
+	    console.log('Búsqueda enviada:', searchQuery);
+	    // Aquí se podría redirigir a la página de tienda con el query param
+	    // navigate(`/tienda?search=${searchQuery}`);
+	  };
+	
+	  return (
     // Añadido sticky, top-0, z-50. Reducido py-4
     <header className="Header">
       <div className="Logo">
@@ -74,22 +84,24 @@ export default function Header() {
           </Link>
         </nav>
 
-        {/* Search Bar e Iconos (agrupados a la derecha) */}
-        <div className="flex items-center gap-2 md:gap-4 flex-1 justify-center"> {/* Flex-1 y justify-center */}
-          {/* Search Bar */}
-          <div className="hidden sm:flex flex-1 max-w-[700px]"> {/* Reducido max-w */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" /> {/* Ajustado icono */}
-              <input
-                type="text"
-                placeholder="Buscar productos..."
-                // Reducida altura y padding
-                className="w-full h-[40px] pl-10 pr-4 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-artra-blue text-sm"
-              />
-            </div>
-          </div>
-
-          {/* Icons */}
+	        {/* Search Bar e Iconos (agrupados a la derecha) */}
+	        <div className="flex items-center gap-2 md:gap-4 flex-1 justify-center"> {/* Flex-1 y justify-center */}
+	          {/* Search Bar */}
+	          <form onSubmit={handleSearch} className="hidden sm:flex flex-1">
+	            <div className="relative w-full"> {/* Añadido w-full */}
+	              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+	              <input
+	                type="text"
+	                placeholder="Buscar productos..."
+	                value={searchQuery}
+	                onChange={(e) => setSearchQuery(e.target.value)}
+	                // Reducida altura y padding
+	                className="w-full h-[40px] pl-10 pr-4 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-artra-blue text-sm"
+	              />
+	            </div>
+	          </form>
+	
+	          {/* Icons */}
           <div className="flex items-center gap-1 md:gap-2"> {/* Reducido gap */}
             {/* Reducido tamaño de botones/iconos */}
             <Link to="/favoritos" className={ICON_BUTTON}>

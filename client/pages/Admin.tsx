@@ -2,26 +2,13 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { productsAPI, categoriesAPI } from '../services/api';
+import { Product, Category } from '../types';
+import QRCode from 'qrcode.react';
 import { Plus, Edit, Trash2, QrCode } from 'lucide-react';
 
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  category_id: number;
-  image_url: string;
-  video_url: string;
-  qr_code: string;
-  featured: boolean;
-}
 
-interface Category {
-  id: number;
-  name: string;
-  slug: string;
-}
+
+
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -38,7 +25,7 @@ export default function Admin() {
     price: 0,
     stock: 0,
     category_id: 0,
-    image_url: '',
+    image: '', // Corregido a 'image'
     video_url: '',
     featured: false
   });
@@ -90,9 +77,19 @@ export default function Admin() {
     e.preventDefault();
     try {
       if (editingProduct) {
-        await productsAPI.update(editingProduct.id, formData);
+        // La API de update es más flexible y acepta el objeto completo
+        await productsAPI.update(editingProduct.id, {
+          ...formData,
+          image: formData.image, // Asegurar que la clave es 'image'
+          video_url: formData.video_url || null,
+        });
       } else {
-        await productsAPI.create(formData);
+        // Usar la nueva función addProduct
+        await productsAPI.addProduct({
+          ...formData,
+          image: formData.image, // Asegurar que la clave es 'image'
+          video_url: formData.video_url || null,
+        });
       }
       await loadData();
       resetForm();
@@ -121,8 +118,8 @@ export default function Admin() {
       price: product.price,
       stock: product.stock,
       category_id: product.category_id,
-      image_url: product.image_url,
-      video_url: product.video_url,
+      image: product.image, // Corregido a 'image'
+      video_url: product.video_url || '', // Asegurar que no es null para el input
       featured: product.featured
     });
     setShowForm(true);
@@ -135,7 +132,7 @@ export default function Admin() {
       price: 0,
       stock: 0,
       category_id: 0,
-      image_url: '',
+      image: '', // Corregido a 'image'
       video_url: '',
       featured: false
     });
@@ -228,24 +225,24 @@ export default function Admin() {
               </div>
 
               <div>
-                <label className="block body-base font-semibold mb-2">URL de Imagen</label>
-                <input
-                  type="url"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                  className="input-field w-full"
-                />
+	                <label className="block body-base font-semibold mb-2">Ruta de Imagen (e.g., /images/MI_IMAGEN.png)</label>
+	                <input
+	                  type="text" // Cambiado a text ya que es una ruta local, no una URL externa
+	                  value={formData.image}
+	                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+	                  className="input-field w-full"
+	                />
               </div>
 
               <div>
                 <label className="block body-base font-semibold mb-2">URL de Video</label>
                 <input
-                  type="url"
-                  value={formData.video_url}
-                  onChange={(e) => setFormData({ ...formData, video_url: e.target.value })}
-                  className="input-field w-full"
-                  placeholder="Se generará QR automáticamente"
-                />
+	                  type="url"
+	                  value={formData.video_url}
+	                  onChange={(e) => setFormData({ ...formData, video_url: e.target.value })}
+	                  className="input-field w-full"
+	                  placeholder="Se generará QR automáticamente"
+	                />
               </div>
 
               <div className="md:col-span-2">
@@ -281,19 +278,19 @@ export default function Admin() {
                 <th className="px-4 py-3 text-left">Categoría</th>
                 <th className="px-4 py-3 text-right">Precio</th>
                 <th className="px-4 py-3 text-right">Stock</th>
-                <th className="px-4 py-3 text-center">QR</th>
+	                <th className="px-4 py-3 text-center">QR</th>
                 <th className="px-4 py-3 text-center">Acciones</th>
               </tr>
             </thead>
             <tbody>
               {products.map(product => (
                 <tr key={product.id} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      {product.image_url && (
-                        <img src={product.image_url} alt={product.name} className="w-12 h-12 object-cover rounded" />
-                      )}
-                      <div>
+	                  <td className="px-4 py-3">
+	                    <div className="flex items-center gap-3">
+	                      {product.image && (
+	                        <img src={product.image} alt={product.name} className="w-12 h-12 object-cover rounded" />
+	                      )}
+	                      <div>
                         <div className="font-semibold">{product.name}</div>
                         {product.featured && (
                           <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Destacado</span>
@@ -306,13 +303,19 @@ export default function Admin() {
                   </td>
                   <td className="px-4 py-3 text-right">${product.price.toFixed(2)}</td>
                   <td className="px-4 py-3 text-right">{product.stock}</td>
-                  <td className="px-4 py-3 text-center">
-                    {product.qr_code && (
-                      <button className="text-blue hover:text-navy">
-                        <QrCode className="w-5 h-5" />
-                      </button>
-                    )}
-                  </td>
+	                  <td className="px-4 py-3 text-center">
+	                    {product.video_url && (
+	                      <a 
+	                        href={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(product.video_url)}`} 
+	                        target="_blank" 
+	                        rel="noopener noreferrer"
+	                        className="text-blue hover:text-navy"
+	                        title="Ver QR del video"
+	                      >
+	                        <QrCode className="w-5 h-5 mx-auto" />
+	                      </a>
+	                    )}
+	                  </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-center gap-2">
                       <button

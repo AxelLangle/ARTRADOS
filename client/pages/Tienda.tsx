@@ -8,9 +8,7 @@ interface Product {
   id: number;
   name: string;
   price: number;
-  image_url: string;
-  category_name?: string;
-  category_slug?: string;
+  image: string; // Corregido a 'image'
 }
 
 interface Category {
@@ -82,17 +80,7 @@ export default function Tienda() {
           <div className="mb-8">
             <h1 className="heading-1 mb-4">Tienda</h1>
             
-            {/* Buscador */}
-            <div className="relative max-w-md">
-              <input
-                type="text"
-                placeholder="Buscar productos..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="input-field w-full pl-4 pr-10"
-              />
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            </div>
+
           </div>
 
           <div className="grid lg:grid-cols-4 gap-8">
@@ -199,12 +187,12 @@ export default function Tienda() {
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {products.map((product) => (
                       <ProductCard
-                        key={product.id}
-                        id={product.id.toString()}
-                        name={product.name}
-                        price={product.price}
-                        image={product.image_url || 'https://via.placeholder.com/300'}
-                      />
+	                        key={product.id}
+	                        id={product.id.toString()}
+	                        name={product.name}
+	                        price={product.price}
+	                        image={product.image || 'https://via.placeholder.com/300'} // Corregido a 'image'
+	                      />
                     ))}
                   </div>
                 </>

@@ -1,61 +1,106 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { wishlistAPI } from "../services/api";
+import { useAuth } from "./AuthContext";
+import { Product } from "../types";
 
-interface WishlistItem {
-  id: string;
+interface WishlistList {
+  id: number;
   name: string;
-  price: number;
-  image: string;
+  default: boolean;
+  items: Product[]; // Los productos completos se cargarán en el contexto
 }
 
+
+
 interface WishlistContextType {
-  items: WishlistItem[];
-  addToWishlist: (product: WishlistItem) => void;
-  removeFromWishlist: (id: string) => void;
-  isInWishlist: (id: string) => boolean;
+  lists: WishlistList[];
+  defaultList: WishlistList | undefined;
+  isLoading: boolean;
+  loadWishlists: () => Promise<void>;
+  addToWishlist: (productId: number, listId?: number) => Promise<void>;
+  removeFromWishlist: (productId: number, listId?: number) => Promise<void>;
+  isInWishlist: (productId: number, listId?: number) => boolean;
 }
 
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
 
 export function WishlistProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<WishlistItem[]>(() => {
-    try {
-      const stored = localStorage.getItem('artra:wishlist');
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  });
+  const { user } = useAuth();
+  const [lists, setLists] = useState<WishlistList[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Guardar en localStorage cuando cambien los items
-  useEffect(() => {
-    try {
-      localStorage.setItem('artra:wishlist', JSON.stringify(items));
-    } catch {
-      // ignore
+  const loadWishlists = async () => {
+    if (!user) {
+      setLists([]);
+      setIsLoading(false);
+      return;
     }
-  }, [items]);
 
-  const addToWishlist = (product: WishlistItem) => {
-    setItems((prevItems) => {
-      const exists = prevItems.find((item) => item.id === product.id);
-      if (exists) {
-        return prevItems;
+    setIsLoading(true);
+    try {
+      let userLists = await wishlistAPI.getLists();
+
+      // CRÍTICO: Crear lista predeterminada si no existe
+      if (userLists.length === 0) {
+        const defaultList = await wishlistAPI.createList('Favoritos');
+        userLists = [defaultList];
       }
-      return [...prevItems, product];
-    });
+
+      // Cargar los detalles de los productos para cada lista
+      const listsWithItems = await Promise.all(userLists.map(async (list: any) => {
+        const items = await wishlistAPI.getListItems(list.id);
+        return { ...list, items };
+      }));
+
+      setLists(listsWithItems);
+    } catch (error) {
+      console.error("Error loading wishlists:", error);
+      setLists([]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const removeFromWishlist = (id: string) => {
-    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  useEffect(() => {
+    loadWishlists();
+  }, [user]); // Recargar cuando el usuario cambie (login/logout)
+
+  const defaultList = lists.find(list => list.default || list.name === 'Favoritos');
+
+  const addToWishlist = async (productId: number, listId?: number) => {
+    const targetListId = listId || defaultList?.id;
+    if (!targetListId) return;
+
+    try {
+      await wishlistAPI.addItem(targetListId, productId);
+      await loadWishlists(); // Recargar para actualizar el estado
+    } catch (error) {
+      console.error("Error adding item to wishlist:", error);
+    }
   };
 
-  const isInWishlist = (id: string) => {
-    return items.some((item) => item.id === id);
+  const removeFromWishlist = async (productId: number, listId?: number) => {
+    const targetListId = listId || defaultList?.id;
+    if (!targetListId) return;
+
+    try {
+      await wishlistAPI.removeItem(targetListId, productId);
+      await loadWishlists(); // Recargar para actualizar el estado
+    } catch (error) {
+      console.error("Error removing item from wishlist:", error);
+    }
+  };
+
+  const isInWishlist = (productId: number, listId?: number) => {
+    const targetList = listId ? lists.find(l => l.id === listId) : defaultList;
+    if (!targetList) return false;
+
+    return targetList.items.some(item => item.id === productId);
   };
 
   return (
     <WishlistContext.Provider
-      value={{ items, addToWishlist, removeFromWishlist, isInWishlist }}
+      value={{ lists, defaultList, isLoading, loadWishlists, addToWishlist, removeFromWishlist, isInWishlist }}
     >
       {children}
     </WishlistContext.Provider>
@@ -69,3 +114,7 @@ export function useWishlist() {
   }
   return context;
 }
+
+// Nota: Necesitamos el tipo Product. Asumo que está en ../types.
+// Si no existe, el siguiente paso será crearlo.
+// Para evitar errores de compilación, voy a crear un archivo de tipos básico.
