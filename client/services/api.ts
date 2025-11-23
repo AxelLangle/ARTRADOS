@@ -39,7 +39,7 @@ let mockProducts = [
     description: 'Hermosa pieza de cerámica hecha a mano con diseños tradicionales mexicanos',
     price: 450,
     category_id: 1,
-    image: '/api/placeholder/300/300',
+    image: '/images/CERAMICAARTESANALAZUL.png',
     featured: true,
     stock: 10,
     video_url: null
@@ -50,7 +50,7 @@ let mockProducts = [
     description: 'Textil tejido a mano con técnicas ancestrales de Oaxaca',
     price: 320,
     category_id: 2,
-    image: '/api/placeholder/300/300',
+    image: '/images/TEJIDOTRADICIONALOAXACA.png',
     featured: true,
     stock: 8,
     video_url: null
@@ -61,7 +61,7 @@ let mockProducts = [
     description: 'Joyería de plata pura con diseños únicos',
     price: 580,
     category_id: 3,
-    image: '/api/placeholder/300/300',
+    image: '/images/COLLARDEPLATAARTESANAL.png',
     featured: true,
     stock: 15,
     video_url: null
@@ -72,7 +72,7 @@ let mockProducts = [
     description: 'Escultura tallada a mano en madera de cedro',
     price: 750,
     category_id: 4,
-    image: '/api/placeholder/300/300',
+    image: '/images/ESCULTURADEMADERATALLADA.png',
     featured: false,
     stock: 5,
     video_url: null
@@ -83,7 +83,7 @@ let mockProducts = [
     description: 'Vaso de vidrio artesanal soplado a mano',
     price: 280,
     category_id: 5,
-    image: '/api/placeholder/300/300',
+    image: '/images/VASODEVIDRIOSOPLADO.png',
     featured: false,
     stock: 20,
     video_url: null
@@ -94,7 +94,7 @@ let mockProducts = [
     description: 'Pieza de cerámica roja con patrones geométricos',
     price: 380,
     category_id: 1,
-    image: '/api/placeholder/300/300',
+    image: '/images/CERAMICAROJATRADICIONAL.png',
     featured: false,
     stock: 12,
     video_url: null
