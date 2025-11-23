@@ -1,15 +1,20 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Layout from "@/components/Layout";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // No validation - just show a success message and navigate
-    alert("Se ha enviado un enlace de recuperación a tu correo electrónico");
-    navigate("/login");
+    // Mostrar modal de éxito en lugar de alerta
+    setShowSuccessModal(true);
+    // Redirigir después de 2 segundos
+    setTimeout(() => {
+      navigate("/iniciar-sesion");
+    }, 2000);
   };
 
   return (
@@ -17,7 +22,7 @@ export default function ForgotPassword() {
       <div className="container mx-auto px-4 py-8">
         {/* Back Button */}
         <Link
-          to="/login"
+          to="/iniciar-sesion"
           className="inline-flex items-center gap-2 text-artra-navy hover:text-artra-blue transition-colors mb-8"
         >
           <ArrowLeft className="w-6 h-6" />
@@ -58,7 +63,7 @@ export default function ForgotPassword() {
             {/* Back to Login Link */}
             <div className="text-center">
               <Link
-                to="/login"
+                to="/iniciar-sesion"
                 className="text-sm text-artra-blue hover:text-artra-navy transition-colors"
               >
                 Volver al inicio de sesión
@@ -67,6 +72,32 @@ export default function ForgotPassword() {
           </form>
         </div>
       </div>
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 shadow-xl">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold text-artra-navy">¡Éxito!</h2>
+              <button
+                onClick={() => setShowSuccessModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <p className="text-artra-blue mb-6">
+              Se ha enviado un enlace de recuperación a tu correo electrónico. Por favor, revisa tu bandeja de entrada.
+            </p>
+            <button
+              onClick={() => navigate("/iniciar-sesion")}
+              className="w-full bg-artra-navy hover:bg-artra-blue text-white font-bold py-2 px-4 rounded-lg transition-colors"
+            >
+              Volver al inicio de sesión
+            </button>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 }
