@@ -8,7 +8,19 @@ export default function Footer() {
           <p className="text-white text-base font-semibold">
             © 2025 ARTRA. Todos los derechos reservados
           </p>
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-8 flex-wrap justify-center">
+            <Link
+              to="/ayuda"
+              className="text-artra-lighter-blue text-base font-semibold hover:text-white transition-colors"
+            >
+              Ayuda
+            </Link>
+            <Link
+              to="/contactanos"
+              className="text-artra-lighter-blue text-base font-semibold hover:text-white transition-colors"
+            >
+              Contáctanos
+            </Link>
             <Link
               to="/terminos"
               className="text-artra-lighter-blue text-base font-semibold hover:text-white transition-colors"
@@ -27,7 +39,6 @@ export default function Footer() {
             >
               Aviso de privacidad
             </Link>
-
           </div>
         </div>
       </div>
