@@ -15,7 +15,8 @@ import {
 
 export default function Header() {
 	  const { items: cartItems } = useCart();
-	  const { items: wishlistItems } = useWishlist();
+	  const { defaultList } = useWishlist();
+	  const wishlistCount = defaultList?.items.length || 0;
 	  const [searchQuery, setSearchQuery] = useState(''); // Añadir estado para la búsqueda
 	
 	  // Función de búsqueda simulada (solo para evitar errores, la funcionalidad real
@@ -104,14 +105,14 @@ export default function Header() {
 	          {/* Icons */}
           <div className="flex items-center gap-1 md:gap-2"> {/* Reducido gap */}
             {/* Reducido tamaño de botones/iconos */}
-            <Link to="/favoritos" className={ICON_BUTTON}>
-              <Heart className={ICON_NAVY_24} />
-              {wishlistItems.length > 0 && (
-                <span className={BADGE_COUNT}>
-                  {wishlistItems.length}
-                </span>
-              )}
-            </Link>
+	            <Link to="/favoritos" className={ICON_BUTTON}>
+	              <Heart className={ICON_NAVY_24} />
+	              {wishlistCount > 0 && (
+	                <span className={BADGE_COUNT}>
+	                  {wishlistCount}
+	                </span>
+	              )}
+	            </Link>
             <Link to="/carrito" className={ICON_BUTTON}>
               <ShoppingCart className={ICON_NAVY_24} />
               {cartItems.length > 0 && (
