@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { productsAPI } from "../services/api";
 import { Product } from "../types";
-import QRCode from 'qrcode.react';
+import { QRCodeCanvas as QRCode } from "qrcode.react";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
