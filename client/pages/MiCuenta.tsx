@@ -172,7 +172,7 @@ export default function MiCuenta() {
 
               {/* Info */}
               <div className="flex-1 space-y-4 pt-2">
-	                <div className="flex flex-col gap-2">
+		                <div className="flex flex-col gap-2 w-1/4">
 	                  <button
 	                    onClick={handleAvatarClick}
 	                    className="px-4 py-2 bg-artra-navy text-white rounded-lg hover:bg-artra-blue transition-colors text-sm font-medium"

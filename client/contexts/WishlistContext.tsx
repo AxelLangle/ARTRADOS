@@ -70,19 +70,27 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
     }
   }, [authContext, user]); // Recargar cuando el contexto o el usuario cambie (login/logout)
 
-  const defaultList = lists.find(list => list.default || list.name === 'Favoritos');
-
-  const addToWishlist = async (productId: number, listId?: number) => {
-    const targetListId = listId || defaultList?.id;
-    if (!targetListId) return;
-
-    try {
-      await wishlistAPI.addItem(targetListId, productId);
-      await loadWishlists(); // Recargar para actualizar el estado
-    } catch (error) {
-      console.error("Error adding item to wishlist:", error);
-    }
-  };
+	  const defaultList = lists.find(list => list.default || list.name === 'Favoritos');
+	
+	  const addToWishlist = async (productId: number, listId?: number) => {
+	    // Si la lista por defecto no está cargada, intentamos forzar la carga
+	    if (!defaultList && !isLoading) {
+	      await loadWishlists();
+	    }
+	
+	    const targetListId = listId || defaultList?.id;
+	    if (!targetListId) {
+	      console.error("No se pudo encontrar la lista de deseos por defecto.");
+	      return;
+	    }
+	
+	    try {
+	      await wishlistAPI.addItem(targetListId, productId);
+	      await loadWishlists(); // Recargar para actualizar el estado
+	    } catch (error) {
+	      console.error("Error adding item to wishlist:", error);
+	    }
+	  };
 
   const removeFromWishlist = async (productId: number, listId?: number) => {
     const targetListId = listId || defaultList?.id;
