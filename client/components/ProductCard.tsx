@@ -6,7 +6,7 @@ import { useWishlist } from "@/contexts/WishlistContext";
 import QRModal from "@/components/QRModal";
 
 interface ProductCardProps {
-  id: string;
+  id: number;
   name: string;
   price: number;
   image: string;
@@ -20,18 +20,19 @@ export default function ProductCard({
 }: ProductCardProps) {
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-  const inWishlist = isInWishlist(id);
+  const productId = Number(id); // Asegurar que el ID es un número para la API
+  const inWishlist = isInWishlist(productId);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
 
   const handleAddToCart = () => {
-    addToCart({ id, name, price, image });
+    addToCart({ id: productId, name, price, image });
   };
 
   const handleToggleWishlist = () => {
     if (inWishlist) {
-      removeFromWishlist(id);
+      removeFromWishlist(productId);
     } else {
-      addToWishlist({ id, name, price, image });
+      addToWishlist(productId);
     }
   };
 

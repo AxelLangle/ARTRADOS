@@ -188,7 +188,7 @@ export default function Tienda() {
                     {products.map((product) => (
                       <ProductCard
 	                        key={product.id}
-	                        id={product.id.toString()}
+		                        id={product.id}
 	                        name={product.name}
 	                        price={product.price}
 	                        image={product.image || 'https://via.placeholder.com/300'} // Corregido a 'image'
