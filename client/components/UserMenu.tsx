@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const { isLogged, logout, user } = useAuth();
-  const isAdmin = user?.role === 'admin';
+	  const isAdmin = user?.isAdmin;
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 

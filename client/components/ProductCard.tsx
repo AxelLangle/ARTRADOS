@@ -21,20 +21,22 @@ export default function ProductCard({
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const productId = Number(id); // Asegurar que el ID es un número para la API
-  const inWishlist = isInWishlist(productId);
+	  const inWishlist = isInWishlist(productId); // Se mantiene para la renderización inicial y re-renderización por contexto
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
 
   const handleAddToCart = () => {
     addToCart({ id: productId, name, price, image });
   };
 
-  const handleToggleWishlist = () => {
-    if (inWishlist) {
-      removeFromWishlist(productId);
-    } else {
-      addToWishlist(productId);
-    }
-  };
+	  const handleToggleWishlist = () => {
+	    // Recalcular el estado justo antes de la acción para evitar race conditions
+	    const isCurrentlyInWishlist = isInWishlist(productId);
+	    if (isCurrentlyInWishlist) {
+	      removeFromWishlist(productId);
+	    } else {
+	      addToWishlist(productId);
+	    }
+	  };
 
   return (
     <div className="w-full max-w-[260px] bg-artra-light-blue rounded-lg overflow-hidden">
