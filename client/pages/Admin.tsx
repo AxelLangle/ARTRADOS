@@ -4,7 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { productsAPI, categoriesAPI } from '../services/api';
 import { Product, Category } from '../types';
 import QRCode from 'qrcode.react';
-import { Plus, Edit, Trash2, QrCode } from 'lucide-react';
+import { Plus, Edit, Trash2, QrCode, ArrowLeft } from 'lucide-react';
+import DragAndDropInput from '../components/DragAndDropInput';
 
 
 
@@ -145,10 +146,18 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="heading-1">Panel de Administración</h1>
+	    <div className="min-h-screen bg-gray-50 py-8">
+	      <div className="max-w-7xl mx-auto px-4">
+	        <div className="flex items-center justify-between mb-8">
+	          <h1 className="heading-1">Panel de Administración</h1>
+	          <button
+	            onClick={() => navigate('/')}
+	            className="btn-secondary flex items-center gap-2"
+	          >
+	            Volver al Inicio
+	          </button>
+	        </div>
+	        <div className="flex items-center justify-between mb-8">
           <button
             onClick={() => setShowForm(!showForm)}
             className="btn-primary flex items-center gap-2"
@@ -201,38 +210,43 @@ export default function Admin() {
                 />
               </div>
 
-              <div>
-                <label className="block body-base font-semibold mb-2">Precio</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={formData.price}
-                  onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
-                  required
-                  className="input-field w-full"
-                />
-              </div>
+	              <div>
+	                <label className="block body-base font-semibold mb-2">Precio</label>
+	                <div className="relative">
+	                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+	                  <input
+	                    type="number"
+	                    step="0.01"
+	                    value={formData.price === 0 ? '' : formData.price}
+	                    onFocus={(e) => e.target.value === '0' && setFormData({ ...formData, price: '' as any })}
+	                    onBlur={(e) => e.target.value === '' && setFormData({ ...formData, price: 0 })}
+	                    onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
+	                    required
+	                    className="input-field w-full pl-6"
+	                  />
+	                </div>
+	              </div>
 
-              <div>
-                <label className="block body-base font-semibold mb-2">Stock</label>
-                <input
-                  type="number"
-                  value={formData.stock}
-                  onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) })}
-                  required
-                  className="input-field w-full"
-                />
-              </div>
-
-              <div>
-	                <label className="block body-base font-semibold mb-2">Ruta de Imagen (e.g., /images/MI_IMAGEN.png)</label>
+	              <div>
+	                <label className="block body-base font-semibold mb-2">Stock</label>
 	                <input
-	                  type="text" // Cambiado a text ya que es una ruta local, no una URL externa
-	                  value={formData.image}
-	                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+	                  type="number"
+	                  value={formData.stock === 0 ? '' : formData.stock}
+	                  onFocus={(e) => e.target.value === '0' && setFormData({ ...formData, stock: '' as any })}
+	                  onBlur={(e) => e.target.value === '' && setFormData({ ...formData, stock: 0 })}
+	                  onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) })}
+	                  required
 	                  className="input-field w-full"
 	                />
-              </div>
+	              </div>
+
+	              <div className="md:col-span-2">
+	                <DragAndDropInput
+	                  value={formData.image}
+	                  onChange={(value) => setFormData({ ...formData, image: value })}
+	                  productName={formData.name}
+	                />
+	              </div>
 
               <div>
                 <label className="block body-base font-semibold mb-2">URL de Video</label>
