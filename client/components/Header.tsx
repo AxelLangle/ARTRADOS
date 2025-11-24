@@ -1,4 +1,5 @@
 // client/components/Header.tsx
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, Heart, ShoppingCart } from "lucide-react";
 import UserMenu from "./UserMenu";
