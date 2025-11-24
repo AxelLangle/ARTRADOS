@@ -1,30 +1,27 @@
 import Layout from "@/components/Layout";
 import ProductCard from "@/components/ProductCard";
+import { productsAPI } from "@/services/api";
+import { useState, useEffect } from "react";
+import { Product } from "@/types";
 
 export default function Index() {
-  const featuredProducts = [
-    {
-      id: "1",
-      name: "Producto artesanal",
-      price: 45,
-      image:
-        "https://api.builder.io/api/v1/image/assets/TEMP/f3748033348ff6036cbef09a04d9c6a06d643dd9?width=466",
-    },
-    {
-      id: "2",
-      name: "Producto artesanal",
-      price: 45,
-      image:
-        "https://api.builder.io/api/v1/image/assets/TEMP/d82fcbac2c633e7e48bf44bc3f02e4ae6e08f9f1?width=466",
-    },
-    {
-      id: "3",
-      name: "Producto artesanal",
-      price: 45,
-      image:
-        "https://api.builder.io/api/v1/image/assets/TEMP/d57e70596c6c096c421ff3969286017b98fad44f?width=466",
-    },
-  ];
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadFeaturedProducts = async () => {
+      try {
+        // Usar el filtro 'featured' de la API
+        const products = await productsAPI.getAll({ featured: true });
+        setFeaturedProducts(products);
+      } catch (error) {
+        console.error("Error al cargar productos destacados:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadFeaturedProducts();
+  }, []);
 
   return (
     <Layout>
@@ -73,11 +70,17 @@ export default function Index() {
         <h2 className="text-artra-navy text-[28px] font-bold mb-12">
           Productos Destacados
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center max-w-[1100px] mx-auto">
-          {featuredProducts.map((product) => (
-            <ProductCard key={product.id} {...product} />
-          ))}
-        </div>
+	        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center max-w-[1100px] mx-auto">
+	          {isLoading ? (
+	            <div className="col-span-full text-center py-12">Cargando productos destacados...</div>
+	          ) : featuredProducts.length === 0 ? (
+	            <div className="col-span-full text-center py-12">No hay productos destacados.</div>
+	          ) : (
+	            featuredProducts.map((product) => (
+	              <ProductCard key={product.id} {...product} />
+	            ))
+	          )}
+	        </div>
       </section>
     </Layout>
   );

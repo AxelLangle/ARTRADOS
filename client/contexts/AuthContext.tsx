@@ -16,8 +16,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const stored = localStorage.getItem("artra:user");
       if (stored) {
-        const userData = JSON.parse(stored);
-        return getUserById(userData.id) || null;
+        return JSON.parse(stored);
       }
       return null;
     } catch {
