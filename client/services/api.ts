@@ -12,17 +12,22 @@ const persistData = () => {
 
 // Inicializar datos si no existen en localStorage
 const initializeData = () => {
-  const storedUsers = localStorage.getItem('mockUsers');
-  const storedProducts = localStorage.getItem('mockProducts');
-  const storedOrders = localStorage.getItem('mockOrders');
-  const storedAddresses = localStorage.getItem('mockAddresses');
-  const storedWishlists = localStorage.getItem('mockWishlists');
+  try {
+    const storedUsers = localStorage.getItem('mockUsers');
+    const storedProducts = localStorage.getItem('mockProducts');
+    const storedOrders = localStorage.getItem('mockOrders');
+    const storedAddresses = localStorage.getItem('mockAddresses');
+    const storedWishlists = localStorage.getItem('mockWishlists');
 
-  if (storedUsers) mockUsers = JSON.parse(storedUsers);
-  if (storedProducts) mockProducts = JSON.parse(storedProducts);
-  if (storedOrders) mockOrders = JSON.parse(storedOrders);
-  if (storedAddresses) mockAddresses = JSON.parse(storedAddresses);
-  if (storedWishlists) mockWishlists = JSON.parse(storedWishlists);
+    if (storedUsers) mockUsers = JSON.parse(storedUsers);
+    if (storedProducts) mockProducts = JSON.parse(storedProducts);
+    if (storedOrders) mockOrders = JSON.parse(storedOrders);
+    if (storedAddresses) mockAddresses = JSON.parse(storedAddresses);
+    if (storedWishlists) mockWishlists = JSON.parse(storedWishlists);
+  } catch (error) {
+    console.error("Error al parsear datos de localStorage. Usando datos iniciales.", error);
+    // Si hay un error, simplemente se usan los mocks iniciales definidos en el archivo.
+  }
 };
 
 // Datos simulados
