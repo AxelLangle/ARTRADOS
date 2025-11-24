@@ -25,12 +25,14 @@ interface WishlistContextType {
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
 
 export function WishlistProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const authContext = useAuth();
+  const user = authContext.user;
   const [lists, setLists] = useState<WishlistList[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const loadWishlists = async () => {
-    if (!user) {
+    // Solo cargar si el contexto de autenticación está disponible y el usuario está definido
+    if (!authContext || !user) {
       setLists([]);
       setIsLoading(false);
       return;
@@ -62,8 +64,11 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    loadWishlists();
-  }, [user]); // Recargar cuando el usuario cambie (login/logout)
+    // Solo cargar si el contexto de autenticación está disponible
+    if (authContext) {
+      loadWishlists();
+    }
+  }, [authContext, user]); // Recargar cuando el contexto o el usuario cambie (login/logout)
 
   const defaultList = lists.find(list => list.default || list.name === 'Favoritos');
 

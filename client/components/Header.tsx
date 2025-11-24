@@ -87,7 +87,7 @@ export default function Header() {
         </nav>
 
 	        {/* Search Bar e Iconos (agrupados a la derecha) */}
-	        <div className="flex items-center gap-2 md:gap-4 flex-1 justify-center"> {/* Flex-1 y justify-center */}
+		        <div className="flex items-center gap-2 md:gap-4 flex-1 justify-center ml-8"> {/* Flex-1 y justify-center. Añadido ml-8 para separar de la navegación. */}
 	          {/* Search Bar */}
 	          <form onSubmit={handleSearch} className="hidden sm:flex flex-1">
 	            <div className="relative w-full"> {/* Añadido w-full */}

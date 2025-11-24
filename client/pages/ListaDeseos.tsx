@@ -14,12 +14,10 @@ interface WishlistList {
 }
 
 interface WishlistItem {
-  id: number;
-  product_id: number;
+  id: number; // ID del producto
   name: string;
   price: number;
-  image_url: string;
-  category_name: string;
+  image: string; // Corregido a 'image'
 }
 
 export default function ListaDeseos() {
@@ -61,7 +59,10 @@ export default function ListaDeseos() {
   const loadListItems = async (listId: number) => {
     try {
       const data = await wishlistAPI.getListItems(listId);
-      setItems(data);
+      // La API simulada devuelve objetos Product, no WishlistItem.
+      // Ajustamos el tipo de items para reflejar esto.
+      setItems(data as any); // Usamos 'any' temporalmente, la API simulada devuelve Product
+
     } catch (error) {
       console.error('Error al cargar items:', error);
     }
@@ -105,10 +106,10 @@ export default function ListaDeseos() {
 
   const handleAddToCart = (item: WishlistItem) => {
     addToCart({
-      id: item.product_id.toString(),
+      id: item.id, // Usar el ID del producto directamente
       name: item.name,
       price: item.price,
-      image: item.image_url,
+      image: item.image, // Corregido a 'image'
       quantity: 1
     });
   };
@@ -201,12 +202,12 @@ export default function ListaDeseos() {
               <div key={item.id} className="bg-white rounded-lg shadow-sm overflow-hidden group">
                 <div className="relative">
                   <img
-                    src={item.image_url || 'https://via.placeholder.com/300'}
+                    src={item.image || 'https://via.placeholder.com/300'}
                     alt={item.name}
                     className="w-full h-64 object-cover"
                   />
                   <button
-                    onClick={() => handleRemoveItem(item.product_id)}
+                    onClick={() => handleRemoveItem(item.id)}
                     className="absolute top-2 right-2 bg-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <Trash2 className="w-5 h-5 text-red-500" />
@@ -214,7 +215,7 @@ export default function ListaDeseos() {
                 </div>
                 <div className="p-4">
                   <h3 className="font-semibold text-navy mb-2">{item.name}</h3>
-                  <p className="text-sm text-gray-600 mb-2">{item.category_name}</p>
+                  {/* <p className="text-sm text-gray-600 mb-2">{item.category_name}</p> */ /* Eliminado ya que no está disponible en WishlistItem */}
                   <p className="text-xl font-bold text-navy mb-4">${item.price.toFixed(2)}</p>
                   <button
                     onClick={() => handleAddToCart(item)}
