@@ -61,7 +61,8 @@ const App = () => (
               <Route path="/checkout/add-card" element={<AddCardForm />} />
               <Route path="/checkout/address" element={<SelectAddress />} />
               <Route path="/checkout/summary" element={<OrderSummary />} />
-              <Route path="/mi-cuenta" element={<MiCuenta />} />
+	              <Route path="/mi-cuenta" element={<MiCuenta />} />
+	              <Route path="/mi-cuenta/configuraciones" element={<Placeholder />} />
               <Route path="/mis-compras" element={<MisCompras />} />
               <Route path="/rastrear-pedido/:id" element={<RastrearPedido />} />
               <Route path="/ayuda" element={<Ayuda />} />

@@ -13,7 +13,7 @@ export default function ForgotPassword() {
     setShowSuccessModal(true);
     // Redirigir después de 2 segundos
     setTimeout(() => {
-      navigate("/iniciar-sesion");
+      navigate("/login");
     }, 2000);
   };
 

@@ -55,20 +55,28 @@ export default function MiCuenta() {
     fileInputRef.current?.click();
   };
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        updateUser({ avatar: reader.result as string });
-        toast({
-          title: "Foto actualizada",
-          description: "Tu foto de perfil ha sido actualizada correctamente.",
-        });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+	  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	    const file = e.target.files?.[0];
+	    if (file) {
+	      const reader = new FileReader();
+	      reader.onloadend = () => {
+	        updateUser({ avatar: reader.result as string });
+	        toast({
+	          title: "Foto actualizada",
+	          description: "Tu foto de perfil ha sido actualizada correctamente.",
+	        });
+	      };
+	      reader.readAsDataURL(file);
+	    }
+	  };
+
+	  const handleDeleteAvatar = () => {
+	    updateUser({ avatar: null }); // Asumo que null o una cadena vacía es el valor por defecto
+	    toast({
+	      title: "Foto eliminada",
+	      description: "Tu foto de perfil ha sido eliminada.",
+	    });
+	  };
 
   const handleSaveProfile = () => {
     updateUser(profileData);
@@ -164,12 +172,22 @@ export default function MiCuenta() {
 
               {/* Info */}
               <div className="flex-1 space-y-4 pt-2">
-                <button
-                  onClick={handleAvatarClick}
-                  className="px-4 py-2 bg-artra-navy text-white rounded-lg hover:bg-artra-blue transition-colors text-sm font-medium"
-                >
-                  Subir nueva foto
-                </button>
+		                <div className="flex flex-col gap-2 w-1/4">
+	                  <button
+	                    onClick={handleAvatarClick}
+	                    className="px-4 py-2 bg-artra-navy text-white rounded-lg hover:bg-artra-blue transition-colors text-sm font-medium"
+	                  >
+	                    Subir nueva foto
+	                  </button>
+	                  {user.avatar && (
+	                    <button
+	                      onClick={handleDeleteAvatar}
+	                      className="px-4 py-2 border border-red-500 text-red-500 rounded-lg hover:bg-red-50 transition-colors text-sm font-medium"
+	                    >
+	                      Eliminar foto
+	                    </button>
+	                  )}
+	                </div>
                 <p className="text-sm text-gray-600">JPG, PNG O JPEG</p>
 
                 <div className="pt-4">

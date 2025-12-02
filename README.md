@@ -1,191 +1,111 @@
-# 🎨 ARTRADOS - Arte y Tradición
+# 🎨 ARTRADOS - Plataforma de Comercio Electrónico Artesanal
 
-Marketplace en línea que conecta artesanos talentosos con personas que buscan productos únicos y de alta calidad hechos a mano en México.
-
-![ARTRADOS](https://img.shields.io/badge/Status-En%20Desarrollo-yellow)
-![React](https://img.shields.io/badge/React-18.3.1-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-blue)
-![Tailwind](https://img.shields.io/badge/Tailwind-3.4.17-blue)
+Bienvenido al repositorio del proyecto **ARTRADOS**, una plataforma de comercio electrónico diseñada para la venta y promoción de artesanías. Este proyecto está construido con React y Vite, utilizando un sistema de API simulada (Mock API) para la gestión de datos de productos, usuarios y listas de deseos.
 
 ---
 
-## 🚀 Características Principales
+## 🚀 Guía de Instalación y Puesta en Marcha (Para Usuarios No Preparados)
 
-### ✅ Páginas Implementadas
+Esta guía te llevará paso a paso a través de la instalación de todas las herramientas necesarias y la configuración del proyecto en una computadora sin preparación previa, utilizando **Visual Studio Code (VS Code)** como editor.
 
-- 🏠 **Inicio**: Landing page con hero section y productos destacados
-- 🛍️ **Tienda**: Catálogo completo de productos artesanales
-- 🛒 **Carrito**: Gestión de productos para compra
-- 💳 **Checkout**: Proceso de pago completo
-- 👤 **Mi Cuenta**: Gestión de perfil, datos personales y direcciones
-- 📦 **Mis Compras**: Historial de pedidos activos y anteriores
-- 📍 **Rastrear Pedido**: Seguimiento en tiempo real con mapa y timeline
-- ℹ️ **¿Quién es ARTRA?**: Información sobre la empresa
-- 📄 **Términos y Políticas**: Documentación legal
+### 1. Instalación de Herramientas Esenciales
 
-### 🔐 Sistema de Autenticación
+Necesitarás instalar tres herramientas principales: Git, Node.js (que incluye npm) y Visual Studio Code.
 
-- Autenticación simulada con validación de credenciales
-- Persistencia de sesión en localStorage
-- Protección de rutas privadas
-- 3 usuarios de prueba pre-configurados
+| Herramienta | Propósito | Enlace de Descarga |
+| :--- | :--- | :--- |
+| **Visual Studio Code (VS Code)** | Editor de código. | [Descargar VS Code](https://code.visualstudio.com/) |
+| **Git** | Sistema de control de versiones (necesario para descargar el código de GitHub). | [Descargar Git](https://git-scm.com/downloads) |
+| **Node.js** | Entorno de ejecución de JavaScript (incluye `npm` y `pnpm`). | [Descargar Node.js (LTS)](https://nodejs.org/en/download/current) |
 
-### 🎨 Diseño
+**Pasos de Instalación:**
 
-- Sistema de diseño normalizado y consistente
-- Paleta de colores corporativa (Navy, Blue, Light Blue)
-- Tipografía estandarizada
-- Componentes reutilizables
-- Responsive design para móvil, tablet y desktop
+1.  **Instalar VS Code:** Descarga e instala la versión adecuada para tu sistema operativo.
+2.  **Instalar Git:** Descarga e instala Git. Durante la instalación, puedes dejar las opciones predeterminadas.
+3.  **Instalar Node.js (LTS):** Descarga e instala la versión LTS (Long-Term Support). Esto instalará `npm` automáticamente.
 
----
+### 2. Instalación del Gestor de Paquetes `pnpm`
 
-## 🛠️ Tecnologías
+El proyecto utiliza `pnpm` para gestionar las dependencias de forma más eficiente.
 
-- **Frontend**: React 18 + TypeScript
-- **Routing**: React Router DOM 6
-- **Styling**: Tailwind CSS 3
-- **Build Tool**: Vite 7
-- **Icons**: Lucide React
-- **Package Manager**: pnpm
-- **Deployment**: Netlify
+1.  Abre tu **Terminal** (o Git Bash si estás en Windows).
+2.  Ejecuta el siguiente comando para instalar `pnpm` globalmente:
 
----
+    ```bash
+    npm install -g pnpm
+    ```
 
-## 📦 Instalación
+### 3. Descarga del Código Fuente (Clonar el Repositorio)
 
-```bash
-# Clonar el repositorio
-git clone https://github.com/AxelLangle/ARTRADOS.git
-cd ARTRADOS
+1.  Abre tu **Terminal** o **Git Bash**.
+2.  Navega hasta la carpeta donde deseas guardar el proyecto (ej. `cd ~/Documentos/Proyectos`).
+3.  Ejecuta el siguiente comando para descargar el proyecto:
 
-# Instalar dependencias
-pnpm install
+    ```bash
+    git clone https://github.com/AxelLangle/ARTRADOS.git
+    ```
 
-# Iniciar servidor de desarrollo
-pnpm dev
+4.  Navega al directorio del proyecto:
 
-# Abrir en navegador
-# http://localhost:8080
-```
+    ```bash
+    cd ARTRADOS
+    ```
 
----
+### 4. Instalación de Dependencias e Inicio del Proyecto
 
-## 🧪 Usuarios de Prueba
+1.  Abre **Visual Studio Code**.
+2.  Ve a **File** > **Open Folder** (Archivo > Abrir Carpeta) y selecciona la carpeta `ARTRADOS`.
+3.  En VS Code, abre la terminal integrada (**Terminal** > **New Terminal** o `Ctrl + Ñ`).
+4.  Ejecuta el siguiente comando para instalar todas las dependencias del proyecto:
 
-Para probar la autenticación, usa cualquiera de estos usuarios:
+    ```bash
+    pnpm install
+    ```
 
-### Usuario 1
-- **Email**: axellangle40@gmail.com
-- **Contraseña**: 123456
+5.  Una vez finalizada la instalación, inicia el servidor de desarrollo:
 
-### Usuario 2
-- **Email**: maria.gonzalez@example.com
-- **Contraseña**: password123
+    ```bash
+    pnpm dev
+    ```
 
-### Usuario 3
-- **Email**: carlos.ramirez@example.com
-- **Contraseña**: mypassword
+6.  El proyecto estará disponible en tu navegador en la dirección: `http://localhost:8080/`
 
 ---
 
-## 📁 Estructura del Proyecto
+## ⚙️ Configuración y Variables de Entorno
 
-```
-ARTRADOS/
-├── client/                 # Código del frontend
-│   ├── components/        # Componentes reutilizables
-│   ├── contexts/          # Contextos de React (Auth, Cart, etc.)
-│   ├── data/              # Datos simulados (usuarios, órdenes)
-│   ├── pages/             # Páginas de la aplicación
-│   ├── App.tsx            # Componente principal con rutas
-│   └── global.css         # Estilos globales y sistema de diseño
-├── public/                # Archivos estáticos
-│   ├── images/           # Imágenes del proyecto
-│   └── Logo-artra.ico    # Favicon
-├── netlify.toml          # Configuración de Netlify
-├── vite.config.ts        # Configuración de Vite
-└── package.json          # Dependencias del proyecto
-```
+El proyecto utiliza variables de entorno para la configuración, aunque la mayoría de los datos son gestionados por la API simulada.
 
----
+### Variables de Entorno
 
-## 🚀 Despliegue en Netlify
+Crea un archivo llamado `.env` en la raíz del proyecto y añade las siguientes variables. Estas son las configuraciones por defecto del proyecto:
 
-El proyecto está configurado para desplegarse automáticamente en Netlify:
+| Variable | Valor por Defecto | Descripción |
+| :--- | :--- | :--- |
+| `VITE_APP_TITLE` | `ARTRADOS` | Título de la aplicación. |
+| `VITE_API_BASE_URL` | `/api` | URL base para las llamadas a la API (simulada). |
+| `VITE_MOCK_API_ENABLED` | `true` | **CRÍTICO:** Mantiene la API simulada activa. |
 
-1. Conecta tu repositorio de GitHub con Netlify
-2. Netlify detectará automáticamente la configuración de `netlify.toml`
-3. El sitio se desplegará automáticamente en cada push a `main`
+### Cuentas de Prueba (Mock API)
 
-**Configuración automática:**
-- Build command: `pnpm run build:client`
-- Publish directory: `dist/client`
-- Node version: 22.13.0
+El sistema de autenticación simulado utiliza las siguientes credenciales:
+
+| Rol | Correo Electrónico | Contraseña |
+| :--- | :--- | :--- |
+| **Administrador** | `admin@artrados.com` | `admin123` |
+| **Cliente** | `user@artrados.com` | `user123` |
 
 ---
 
-## 📝 Scripts Disponibles
+## 💻 Comandos Comunes del Proyecto
 
-```bash
-# Desarrollo
-pnpm dev              # Inicia servidor de desarrollo
+Estos comandos se ejecutan desde la terminal dentro de la carpeta `ARTRADOS`.
 
-# Producción
-pnpm build            # Construye cliente y servidor
-pnpm build:client     # Construye solo el cliente
-pnpm build:server     # Construye solo el servidor
-pnpm start            # Inicia servidor de producción
-
-# Calidad de código
-pnpm test             # Ejecuta tests
-pnpm typecheck        # Verifica tipos de TypeScript
-pnpm format.fix       # Formatea código con Prettier
-```
-
----
-
-## 🎯 Roadmap
-
-### ✅ Completado
-- [x] Diseño y estructura base
-- [x] Sistema de autenticación simulada
-- [x] Páginas Mi Cuenta, Mis Compras y Rastrear Pedido
-- [x] Normalización de diseño
-- [x] Responsive design básico
-- [x] Configuración para despliegue en Netlify
-
-### 📋 Futuras Mejoras
-- [ ] Backend real con API REST
-- [ ] Base de datos (SQLite/PostgreSQL)
-- [ ] Autenticación real con JWT
-- [ ] Integración con Google Maps API
-- [ ] Sistema de pagos real (Stripe/PayPal)
-- [ ] Panel de administración
-- [ ] Generación de QR codes para videos
-- [ ] Subida de imágenes a S3/Cloudinary
-- [ ] Envío de emails (notificaciones, recuperación de contraseña)
-
----
-
-## 👥 Equipo
-
-**Desarrollador**: Axel Langle  
-**Fecha**: Noviembre 2025  
-
----
-
-## 📞 Contacto
-
-- **GitHub**: [@AxelLangle](https://github.com/AxelLangle)
-- **Email**: axellangle40@gmail.com
-
----
-
-<div align="center">
-
-**Hecho con ❤️ en México**
-
-🎨 **ARTRA** - Arte y Tradición
-
-</div>
+| Comando | Descripción |
+| :--- | :--- |
+| `pnpm install` | Instala todas las dependencias del proyecto. |
+| `pnpm dev` | **Comando principal:** Inicia el servidor de desarrollo en `http://localhost:8080/`. |
+| `pnpm build` | Compila el proyecto para producción (genera la carpeta `dist`). |
+| `pnpm preview` | Sirve la versión de producción compilada localmente. |
+| `git pull` | Actualiza el código local con los últimos cambios del repositorio. |
+| `git push` | Sube tus cambios locales al repositorio de GitHub. |

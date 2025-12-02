@@ -225,28 +225,35 @@ export default function Admin() {
                 />
               </div>
 
-              <div>
-                <label className="block body-base font-semibold mb-2">Precio</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={formData.price}
-                  onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
-                  required
-                  className="input-field w-full"
-                />
-              </div>
+	              <div>
+	                <label className="block body-base font-semibold mb-2">Precio</label>
+	                <div className="relative">
+	                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+	                  <input
+	                    type="number"
+	                    step="0.01"
+	                    value={formData.price === 0 ? '' : formData.price}
+	                    onFocus={(e) => e.target.value === '0' && setFormData({ ...formData, price: '' as any })}
+	                    onBlur={(e) => e.target.value === '' && setFormData({ ...formData, price: 0 })}
+	                    onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
+	                    required
+	                    className="input-field w-full pl-6"
+	                  />
+	                </div>
+	              </div>
 
-              <div>
-                <label className="block body-base font-semibold mb-2">Stock</label>
-                <input
-                  type="number"
-                  value={formData.stock}
-                  onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) })}
-                  required
-                  className="input-field w-full"
-                />
-              </div>
+	              <div>
+	                <label className="block body-base font-semibold mb-2">Stock</label>
+	                <input
+	                  type="number"
+	                  value={formData.stock === 0 ? '' : formData.stock}
+	                  onFocus={(e) => e.target.value === '0' && setFormData({ ...formData, stock: '' as any })}
+	                  onBlur={(e) => e.target.value === '' && setFormData({ ...formData, stock: 0 })}
+	                  onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) })}
+	                  required
+	                  className="input-field w-full"
+	                />
+	              </div>
 
               <div className="md:col-span-2">
                 <label className="block body-base font-semibold mb-2">Imagen del producto</label>

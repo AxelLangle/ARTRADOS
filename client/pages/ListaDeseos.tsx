@@ -1,116 +1,33 @@
-import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import { ArrowLeft, Heart, Plus, X, Trash2 } from "lucide-react";
+import { ArrowLeft, Heart, Trash2 } from "lucide-react";
 import Layout from "@/components/Layout";
 import { useCart } from "@/contexts/CartContext";
-import { wishlistAPI, categoriesAPI } from '../services/api';
-import { Product, Category } from "@/types";
+import { useWishlist } from "@/contexts/WishlistContext";
 import { useAuth } from '../contexts/AuthContext';
-
-interface WishlistList {
-  id: number;
-  name: string;
-  is_default: boolean;
-  item_count: number;
-}
-
-type WishlistItem = Product; // Usar el tipo Product que devuelve la API simulada
+import { Product } from "@/types";
 
 export default function ListaDeseos() {
   const { addToCart } = useCart();
   const { isLogged } = useAuth();
-  const [lists, setLists] = useState<WishlistList[]>([]);
-  const [currentList, setCurrentList] = useState<WishlistList | null>(null);
-  const [items, setItems] = useState<WishlistItem[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [showNewListModal, setShowNewListModal] = useState(false);
-  const [newListName, setNewListName] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const { defaultList, isLoading, removeFromWishlist } = useWishlist();
 
-  useEffect(() => {
-    if (isLogged) {
-      loadLists();
-      loadCategories();
-    }
-  }, [isLogged]);
-
-  useEffect(() => {
-    if (currentList) {
-      loadListItems(currentList.id);
-    }
-  }, [currentList]);
-
-  const loadLists = async () => {
-    try {
-      const data = await wishlistAPI.getLists();
-      setLists(data);
-      if (data.length > 0) {
-        setCurrentList(data[0]);
-      }
-    } catch (error) {
-      console.error('Error al cargar listas:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const loadListItems = async (listId: number) => {
-    try {
-      const data = await wishlistAPI.getListItems(listId);
-      setItems(data as WishlistItem[]);
-    } catch (error) {
-      console.error('Error al cargar items:', error);
-    }
-  };
-
-  const loadCategories = async () => {
-    try {
-      const data = await categoriesAPI.getAll();
-      setCategories(data);
-    } catch (error) {
-      console.error('Error al cargar categorías:', error);
-    }
-  };
-
-  const handleCreateList = async () => {
-    if (!newListName.trim()) return;
-    
-    try {
-      await wishlistAPI.createList(newListName);
-      await loadLists();
-      setNewListName('');
-      setShowNewListModal(false);
-    } catch (error) {
-      console.error('Error al crear lista:', error);
-      alert('Error al crear lista');
-    }
-  };
-
-  const handleDeleteList = async (listId: number) => {
-    if (!confirm('¿Estás seguro de eliminar esta lista?')) return;
-    
-    try {
-      await wishlistAPI.deleteList(listId);
-      await loadLists();
-    } catch (error: any) {
-      alert(error.message || 'Error al eliminar lista');
-    }
-  };
+  // Usamos el estado del contexto para renderizar
+  const items = defaultList?.items || [];
 
   const handleRemoveItem = async (productId: number) => {
-    if (!currentList) return;
+    if (!defaultList) return;
     
     try {
-      await wishlistAPI.removeItem(currentList.id, productId);
-      await loadListItems(currentList.id);
+      // Usamos la función del contexto, que ya llama a loadWishlists()
+      await removeFromWishlist(productId, defaultList.id);
     } catch (error) {
       console.error('Error al eliminar item:', error);
     }
   };
 
-  const handleAddToCart = (item: WishlistItem) => {
+  const handleAddToCart = (item: Product) => {
     addToCart({
-      id: item.id.toString(),
+      id: item.id,
       name: item.name,
       price: item.price,
       image: item.image,
@@ -122,9 +39,9 @@ export default function ListaDeseos() {
     return (
       <Layout>
         <div className="container mx-auto px-4 py-16 text-center">
-          <Heart className="w-16 h-16 text-navy/30 mx-auto mb-4" />
-          <h2 className="heading-2 mb-4">Inicia sesión para ver tus favoritos</h2>
-          <Link to="/login" className="btn-primary inline-block">
+          <Heart className="w-16 h-16 text-artra-navy/30 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-artra-navy mb-4">Inicia sesión para ver tus favoritos</h2>
+          <Link to="/login" className="px-6 py-3 bg-artra-blue text-white rounded-lg hover:bg-artra-dark-navy transition-colors inline-block">
             Iniciar Sesión
           </Link>
         </div>
@@ -136,7 +53,7 @@ export default function ListaDeseos() {
     return (
       <Layout>
         <div className="container mx-auto px-4 py-16 text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-navy border-t-transparent"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-artra-navy border-t-transparent"></div>
         </div>
       </Layout>
     );
@@ -148,124 +65,54 @@ export default function ListaDeseos() {
         {/* Back Button */}
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-navy hover:text-blue transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-artra-navy hover:text-artra-blue transition-colors mb-8"
         >
           <ArrowLeft className="w-6 h-6" />
           <span className="text-2xl">Volver</span>
         </Link>
 
         {/* Title */}
-        <h1 className="heading-1 mb-8">Mis favoritos</h1>
-
-        {/* Tabs */}
-        <div className="mb-8 border-b border-navy/20">
-          <div className="flex gap-6 relative overflow-x-auto">
-            {lists.map(list => (
-              <div key={list.id} className="flex items-center gap-2 group">
-                <button
-                  onClick={() => setCurrentList(list)}
-                  className={`pb-2 text-xl font-semibold relative whitespace-nowrap ${
-                    currentList?.id === list.id
-                      ? 'text-navy'
-                      : 'text-navy/50 hover:text-navy'
-                  }`}
-                >
-                  {list.name} ({list.item_count})
-                  {currentList?.id === list.id && (
-                    <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-navy rounded-t"></div>
-                  )}
-                </button>
-                {!list.is_default && (
-                  <button
-                    onClick={() => handleDeleteList(list.id)}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <X className="w-4 h-4 text-red-500" />
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              onClick={() => setShowNewListModal(true)}
-              className="pb-2 ml-2 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
-            >
-              <Plus className="w-7 h-7 text-navy" strokeWidth={2} />
-            </button>
-          </div>
-        </div>
+        <h1 className="text-4xl font-bold text-artra-navy mb-8">Mis favoritos</h1>
 
         {/* Products Grid */}
         {items.length === 0 ? (
           <div className="text-center py-16">
-            <Heart className="w-16 h-16 text-navy/30 mx-auto mb-4" />
-            <p className="text-xl text-navy/60">No tienes productos en esta lista</p>
+            <Heart className="w-16 h-16 text-artra-navy/30 mx-auto mb-4" />
+            <p className="text-xl text-artra-navy/60">No tienes productos en tu lista de favoritos</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {items.map((item) => (
-              <div key={item.id} className="bg-white rounded-lg shadow-sm overflow-hidden group">
+              <div key={item.id} className="bg-white rounded-lg shadow-sm overflow-hidden group border border-artra-lighter-blue">
                 <div className="relative">
-                  <img
-                    src={item.image || 'https://via.placeholder.com/300'}
-                    alt={item.name}
-                    className="w-full h-64 object-cover"
-                  />
+                  <Link to={`/producto/${item.id}`}>
+                    <img
+                      src={item.image || 'https://via.placeholder.com/300'}
+                      alt={item.name}
+                      className="w-full h-64 object-cover"
+                    />
+                  </Link>
                   <button
                     onClick={() => handleRemoveItem(item.id)}
-                    className="absolute top-2 right-2 bg-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-2 right-2 bg-white rounded-full p-2 shadow-md hover:bg-red-50 transition-colors"
                   >
                     <Trash2 className="w-5 h-5 text-red-500" />
                   </button>
                 </div>
                 <div className="p-4">
-                  <h3 className="font-semibold text-navy mb-2">{item.name}</h3>
-                  <p className="text-sm text-gray-600 mb-2">
-                    {categories.find(c => c.id === item.category_id)?.name || 'Sin categoría'}
-                  </p>
-                  <p className="text-xl font-bold text-navy mb-4">${item.price.toFixed(2)}</p>
+                  <Link to={`/producto/${item.id}`}>
+                    <h3 className="font-semibold text-artra-navy mb-2 hover:text-artra-blue transition-colors">{item.name}</h3>
+                  </Link>
+                  <p className="text-xl font-bold text-artra-navy mb-4">${item.price.toFixed(2)}</p>
                   <button
                     onClick={() => handleAddToCart(item)}
-                    className="btn-primary w-full"
+                    className="w-full py-2 bg-artra-blue text-white rounded-lg hover:bg-artra-dark-navy transition-colors font-semibold"
                   >
                     Agregar al carrito
                   </button>
                 </div>
               </div>
             ))}
-          </div>
-        )}
-
-        {/* Modal Nueva Lista */}
-        {showNewListModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-              <h2 className="heading-3 mb-4">Nueva Lista</h2>
-              <input
-                type="text"
-                value={newListName}
-                onChange={(e) => setNewListName(e.target.value)}
-                placeholder="Nombre de la lista"
-                className="input-field w-full mb-4"
-                autoFocus
-              />
-              <div className="flex gap-4">
-                <button
-                  onClick={() => {
-                    setShowNewListModal(false);
-                    setNewListName('');
-                  }}
-                  className="btn-secondary flex-1"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={handleCreateList}
-                  className="btn-primary flex-1"
-                >
-                  Crear
-                </button>
-              </div>
-            </div>
           </div>
         )}
       </div>
