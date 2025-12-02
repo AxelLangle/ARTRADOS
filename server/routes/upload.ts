@@ -4,20 +4,17 @@ import path from "path";
 import fs from "fs";
 import os from "os";
 
-// Detect serverless (Netlify functions) environment where disk persistence is not available
-const isServerless = Boolean(process.env.NETLIFY || process.env.AWS_REGION);
+// Configurable storage mode; default to disk to persist uploaded images
+const storageMode = (process.env.UPLOAD_STORAGE || "disk").toLowerCase();
+const imagesDir = path.join(process.cwd(), "public", "images");
+if (!fs.existsSync(imagesDir)) {
+  fs.mkdirSync(imagesDir, { recursive: true });
+}
 
-// Choose storage based on environment
 let storage: multer.StorageEngine;
-if (isServerless) {
-  // Use memory storage in serverless; return a data URL to the client
+if (storageMode === "memory") {
   storage = multer.memoryStorage();
 } else {
-  const imagesDir = path.join(process.cwd(), "public", "images");
-  if (!fs.existsSync(imagesDir)) {
-    fs.mkdirSync(imagesDir, { recursive: true });
-  }
-
   storage = multer.diskStorage({
     destination: (_req, _file, cb) => {
       cb(null, imagesDir);
@@ -42,13 +39,17 @@ export const handleUpload = [
     if (!req.file) {
       return res.status(400).json({ error: "No se recibió archivo" });
     }
-    if (isServerless && req.file.buffer) {
+    if (storageMode === "memory" && req.file.buffer) {
       const mime = req.file.mimetype || "image/png";
       const base64 = req.file.buffer.toString("base64");
       const dataUrl = `data:${mime};base64,${base64}`;
       return res.json({ dataUrl });
     }
     const relPath = `/images/${req.file.filename}`;
-    return res.json({ path: relPath });
+    // Construct absolute URL when possible
+    const proto = (req.headers["x-forwarded-proto"] as string) || req.protocol;
+    const host = (req.headers.host as string) || "";
+    const absUrl = host ? `${proto}://${host}${relPath}` : relPath;
+    return res.json({ path: relPath, url: absUrl });
   }) as RequestHandler,
 ];
