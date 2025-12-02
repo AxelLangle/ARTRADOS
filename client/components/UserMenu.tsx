@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, Settings, ShoppingBag, HelpCircle, LogOut, LogIn } from "lucide-react";
+import { User, Settings, ShoppingBag, HelpCircle, LogOut, LogIn, Boxes } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const { isLogged, logout } = useAuth();
+  const { isLogged, logout, user } = useAuth();
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -53,14 +53,31 @@ export default function UserMenu() {
                   </span>
                 </button>
 
-                <button className="w-full h-14 px-4 flex items-center gap-4 hover:bg-gray-50 transition-colors border-b border-gray-100">
-                  <div className="w-[50px] h-[50px] flex items-center justify-center rounded-2xl bg-artra-lighter-blue/20">
-                    <Settings className="w-7 h-7 text-artra-navy" />
-                  </div>
-                  <span className="text-artra-dark-navy text-lg font-medium">
-                    Configuraciones
-                  </span>
-                </button>
+                {user?.isAdmin ? (
+                  <button
+                    onClick={() => {
+                      setIsOpen(false);
+                      navigate("/admin");
+                    }}
+                    className="w-full h-14 px-4 flex items-center gap-4 hover:bg-gray-50 transition-colors border-b border-gray-100"
+                  >
+                    <div className="w-[50px] h-[50px] flex items-center justify-center rounded-2xl bg-artra-lighter-blue/20">
+                      <Boxes className="w-7 h-7 text-artra-navy" />
+                    </div>
+                    <span className="text-artra-dark-navy text-lg font-medium">
+                      Administrar productos
+                    </span>
+                  </button>
+                ) : (
+                  <button className="w-full h-14 px-4 flex items-center gap-4 hover:bg-gray-50 transition-colors border-b border-gray-100">
+                    <div className="w-[50px] h-[50px] flex items-center justify-center rounded-2xl bg-artra-lighter-blue/20">
+                      <Settings className="w-7 h-7 text-artra-navy" />
+                    </div>
+                    <span className="text-artra-dark-navy text-lg font-medium">
+                      Configuraciones
+                    </span>
+                  </button>
+                )}
 
                 <button
                   onClick={() => {
