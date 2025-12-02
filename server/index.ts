@@ -44,8 +44,9 @@ export function createServer() {
   app.use("/api/categories", categoryRoutes);
   app.use("/api/wishlist", wishlistRoutes);
   app.use("/api/contact", contactRoutes);
-  // Upload endpoint
-  app.post("/api/upload", handleUpload);
+  
+  // Upload endpoint - usar spread para aplicar middlewares correctamente
+  app.post("/api/upload", ...handleUpload);
 
   // Health check
   app.get("/api/health", (_req, res) => {
