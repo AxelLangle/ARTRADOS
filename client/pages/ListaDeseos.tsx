@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Heart, Plus, X, Trash2 } from "lucide-react";
 import Layout from "@/components/Layout";
 import { useCart } from "@/contexts/CartContext";
-import { wishlistAPI } from '../services/api';
+import { wishlistAPI, categoriesAPI } from '../services/api';
+import { Product, Category } from "@/types";
 import { useAuth } from '../contexts/AuthContext';
 
 interface WishlistList {
@@ -13,14 +14,7 @@ interface WishlistList {
   item_count: number;
 }
 
-interface WishlistItem {
-  id: number;
-  product_id: number;
-  name: string;
-  price: number;
-  image_url: string;
-  category_name: string;
-}
+type WishlistItem = Product; // Usar el tipo Product que devuelve la API simulada
 
 export default function ListaDeseos() {
   const { addToCart } = useCart();
@@ -28,6 +22,7 @@ export default function ListaDeseos() {
   const [lists, setLists] = useState<WishlistList[]>([]);
   const [currentList, setCurrentList] = useState<WishlistList | null>(null);
   const [items, setItems] = useState<WishlistItem[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [showNewListModal, setShowNewListModal] = useState(false);
   const [newListName, setNewListName] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -35,6 +30,7 @@ export default function ListaDeseos() {
   useEffect(() => {
     if (isLogged) {
       loadLists();
+      loadCategories();
     }
   }, [isLogged]);
 
@@ -61,9 +57,18 @@ export default function ListaDeseos() {
   const loadListItems = async (listId: number) => {
     try {
       const data = await wishlistAPI.getListItems(listId);
-      setItems(data);
+      setItems(data as WishlistItem[]);
     } catch (error) {
       console.error('Error al cargar items:', error);
+    }
+  };
+
+  const loadCategories = async () => {
+    try {
+      const data = await categoriesAPI.getAll();
+      setCategories(data);
+    } catch (error) {
+      console.error('Error al cargar categorías:', error);
     }
   };
 
@@ -105,10 +110,10 @@ export default function ListaDeseos() {
 
   const handleAddToCart = (item: WishlistItem) => {
     addToCart({
-      id: item.product_id.toString(),
+      id: item.id.toString(),
       name: item.name,
       price: item.price,
-      image: item.image_url,
+      image: item.image,
       quantity: 1
     });
   };
@@ -201,12 +206,12 @@ export default function ListaDeseos() {
               <div key={item.id} className="bg-white rounded-lg shadow-sm overflow-hidden group">
                 <div className="relative">
                   <img
-                    src={item.image_url || 'https://via.placeholder.com/300'}
+                    src={item.image || 'https://via.placeholder.com/300'}
                     alt={item.name}
                     className="w-full h-64 object-cover"
                   />
                   <button
-                    onClick={() => handleRemoveItem(item.product_id)}
+                    onClick={() => handleRemoveItem(item.id)}
                     className="absolute top-2 right-2 bg-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <Trash2 className="w-5 h-5 text-red-500" />
@@ -214,7 +219,9 @@ export default function ListaDeseos() {
                 </div>
                 <div className="p-4">
                   <h3 className="font-semibold text-navy mb-2">{item.name}</h3>
-                  <p className="text-sm text-gray-600 mb-2">{item.category_name}</p>
+                  <p className="text-sm text-gray-600 mb-2">
+                    {categories.find(c => c.id === item.category_id)?.name || 'Sin categoría'}
+                  </p>
                   <p className="text-xl font-bold text-navy mb-4">${item.price.toFixed(2)}</p>
                   <button
                     onClick={() => handleAddToCart(item)}
