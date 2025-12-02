@@ -26,6 +26,8 @@ const upload = multer({ storage });
 export const handleUpload = [
   upload.single("file"),
   ((req, res) => {
+    // Debug logs
+    // console.log("Upload request received", { body: req.body, file: req.file });
     if (!req.file) {
       return res.status(400).json({ error: "No se recibió archivo" });
     }

@@ -10,6 +10,8 @@ import categoryRoutes from "./routes/categories";
 import wishlistRoutes from "./routes/wishlist";
 import contactRoutes from "./routes/contact";
 import { handleUpload } from "./routes/upload";
+import path from "path";
+import * as expressModule from "express";
 
 export function createServer() {
   const app = express();
@@ -22,6 +24,10 @@ export function createServer() {
   app.use(cors());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+
+  // Servir archivos estáticos de /public en desarrollo
+  const publicDir = path.join(process.cwd(), "public");
+  app.use(expressModule.static(publicDir));
 
   // Example API routes
   app.get("/api/ping", (_req, res) => {
