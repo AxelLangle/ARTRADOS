@@ -398,13 +398,15 @@ export const productsAPI = {
     image: string;
     stock: number;
     video_url: string | null;
+    featured?: boolean;
   }) => {
     await simulateDelay(500);
     
     const newProduct = {
       id: Math.max(...mockProducts.map(p => p.id), 0) + 1,
       ...productData,
-      featured: false, // Por defecto, no destacado
+      // Mantener el valor de 'featured' si viene del formulario; por defecto false
+      featured: productData.featured ?? false,
     };
 
     mockProducts.push(newProduct);
