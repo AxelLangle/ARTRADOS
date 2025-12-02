@@ -26,9 +26,10 @@ export default function DragAndDropInput({ value, onChange, productName }: Props
       });
       if (!res.ok) throw new Error("Error subiendo imagen");
       const data = await res.json();
-      const url = data?.path || data?.url || data?.dataUrl;
-      if (!url) throw new Error("Respuesta inválida del servidor");
-      onChange(url); // puede ser ruta pública (/images/...) o data URL
+      // Prefer absolute URL (Cloudinary) > dataUrl (memory) > path (disk)
+      const imageUrl = data?.url || data?.dataUrl || data?.path;
+      if (!imageUrl) throw new Error("Respuesta inválida del servidor");
+      onChange(imageUrl);
     } catch (e: any) {
       setError(e.message || "Error al subir la imagen");
     } finally {
