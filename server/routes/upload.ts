@@ -5,17 +5,25 @@ import fs from "fs";
 import os from "os";
 import { v2 as cloudinary } from "cloudinary";
 
-// Configurable storage mode; default to disk to persist uploaded images
-const storageMode = (process.env.UPLOAD_STORAGE || "disk").toLowerCase();
-const imagesDir = path.join(process.cwd(), "public", "images");
-if (!fs.existsSync(imagesDir)) {
-  fs.mkdirSync(imagesDir, { recursive: true });
-}
+// Detect serverless environment (Netlify, Vercel, AWS Lambda)
+const isServerless = Boolean(
+  process.env.NETLIFY || 
+  process.env.VERCEL || 
+  process.env.AWS_LAMBDA_FUNCTION_NAME ||
+  process.env.LAMBDA_TASK_ROOT
+);
+
+// Use memory storage in serverless, disk otherwise
+const storageMode = isServerless ? "memory" : (process.env.UPLOAD_STORAGE || "disk").toLowerCase();
 
 let storage: multer.StorageEngine;
 if (storageMode === "memory") {
   storage = multer.memoryStorage();
 } else {
+  const imagesDir = path.join(process.cwd(), "public", "images");
+  if (!fs.existsSync(imagesDir)) {
+    fs.mkdirSync(imagesDir, { recursive: true });
+  }
   storage = multer.diskStorage({
     destination: (_req, _file, cb) => {
       cb(null, imagesDir);
@@ -34,15 +42,27 @@ const upload = multer({ storage });
 
 export const handleUpload = [
   upload.single("file"),
-  ((req, res) => {
+  (async (req, res) => {
     // Debug logs
     // console.log("Upload request received", { body: req.body, file: req.file });
     if (!req.file) {
       return res.status(400).json({ error: "No se recibió archivo" });
     }
-    const useCloudinary = Boolean(process.env.CLOUDINARY_URL || (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET));
+    const useCloudinary = Boolean(
+      process.env.CLOUDINARY_URL || 
+      (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET)
+    );
 
-    // If Cloudinary is configured, upload there for persistent storage in production
+    // In serverless, Cloudinary is required; in local dev, it's optional
+    if (isServerless && !useCloudinary) {
+      console.error("Cloudinary not configured in serverless environment");
+      return res.status(500).json({ 
+        error: "Cloudinary configuration required in production",
+        hint: "Set CLOUDINARY_URL or CLOUDINARY_CLOUD_NAME/API_KEY/API_SECRET in Netlify environment variables"
+      });
+    }
+
+    // If Cloudinary is configured, upload there for persistent storage
     if (useCloudinary) {
       // Configure if explicit credentials are present
       if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
@@ -54,26 +74,37 @@ export const handleUpload = [
       }
 
       const folder = "artrados/products";
-      const filename = (req.file.originalname || "image").replace(/[^a-z0-9-_.]/gi, "_");
+      const timestamp = Date.now();
+      const originalName = path.parse(req.file.originalname).name.replace(/[^a-z0-9-_]/gi, "_");
+      const filename = `${originalName}-${timestamp}`;
 
-      const uploadBuffer = async () => {
-        const base64 = req.file.buffer.toString("base64");
-        const dataUrl = `data:${req.file.mimetype};base64,${base64}`;
-        return cloudinary.uploader.upload(dataUrl, { folder, public_id: filename, overwrite: true });
-      };
-
-      const uploadFilePath = async (filePath: string) => cloudinary.uploader.upload(filePath, { folder, public_id: filename, overwrite: true });
-
-      const doUpload = storageMode === "memory" && req.file.buffer ? uploadBuffer : uploadFilePath.bind(null, req.file.path);
-
-      return doUpload()
-        .then((result) => {
-          return res.json({ url: result.secure_url, public_id: result.public_id });
-        })
-        .catch((err) => {
-          console.error("Cloudinary upload error", err);
-          return res.status(500).json({ error: "Error subiendo imagen" });
+      try {
+        let result;
+        if (storageMode === "memory" && req.file.buffer) {
+          // Upload from buffer (serverless)
+          const base64 = req.file.buffer.toString("base64");
+          const dataUrl = `data:${req.file.mimetype};base64,${base64}`;
+          result = await cloudinary.uploader.upload(dataUrl, { 
+            folder, 
+            public_id: filename, 
+            resource_type: "auto"
+          });
+        } else {
+          // Upload from file path (local dev)
+          result = await cloudinary.uploader.upload(req.file.path, { 
+            folder, 
+            public_id: filename,
+            resource_type: "auto"
+          });
+        }
+        return res.json({ url: result.secure_url, public_id: result.public_id });
+      } catch (err: any) {
+        console.error("Cloudinary upload error:", err);
+        return res.status(500).json({ 
+          error: "Error subiendo imagen a Cloudinary",
+          details: err.message || "Unknown error"
         });
+      }
     }
 
     if (storageMode === "memory" && req.file.buffer) {
