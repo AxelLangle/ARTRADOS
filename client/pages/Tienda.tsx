@@ -9,6 +9,7 @@ interface Product {
   name: string;
   price: number;
   image: string; // Corregido a 'image'
+  video_url?: string | null;
 }
 
 interface Category {
@@ -191,7 +192,8 @@ export default function Tienda() {
 	                        id={product.id.toString()}
 	                        name={product.name}
 	                        price={product.price}
-	                        image={product.image || 'https://via.placeholder.com/300'} // Corregido a 'image'
+                        image={product.image || 'https://via.placeholder.com/300'} // Corregido a 'image'
+                        video_url={(product as any).video_url || null}
 	                      />
                     ))}
                   </div>
