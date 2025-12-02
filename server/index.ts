@@ -48,6 +48,18 @@ export function createServer() {
   // Upload endpoint - usar spread para aplicar middlewares correctamente
   app.post("/api/upload", ...handleUpload);
 
+  // Debug endpoint - REMOVE IN PRODUCTION
+  app.get("/api/debug-env", (_req, res) => {
+    res.json({
+      hasCloudinaryURL: Boolean(process.env.CLOUDINARY_URL),
+      hasCloudName: Boolean(process.env.CLOUDINARY_CLOUD_NAME),
+      hasAPIKey: Boolean(process.env.CLOUDINARY_API_KEY),
+      hasAPISecret: Boolean(process.env.CLOUDINARY_API_SECRET),
+      isServerless: Boolean(process.env.NETLIFY),
+      cloudName: process.env.CLOUDINARY_CLOUD_NAME?.substring(0, 3) + "***",
+    });
+  });
+
   // Health check
   app.get("/api/health", (_req, res) => {
     res.json({ status: "ok", message: "API de ARTRADOS funcionando correctamente" });
