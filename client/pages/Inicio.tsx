@@ -1,30 +1,33 @@
+import { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import ProductCard from "@/components/ProductCard";
+import { productsAPI } from "../services/api";
 
 export default function Index() {
-  const featuredProducts = [
-    {
-      id: "1",
-      name: "Producto artesanal",
-      price: 45,
-      image:
-        "https://api.builder.io/api/v1/image/assets/TEMP/f3748033348ff6036cbef09a04d9c6a06d643dd9?width=466",
-    },
-    {
-      id: "2",
-      name: "Producto artesanal",
-      price: 45,
-      image:
-        "https://api.builder.io/api/v1/image/assets/TEMP/d82fcbac2c633e7e48bf44bc3f02e4ae6e08f9f1?width=466",
-    },
-    {
-      id: "3",
-      name: "Producto artesanal",
-      price: 45,
-      image:
-        "https://api.builder.io/api/v1/image/assets/TEMP/d57e70596c6c096c421ff3969286017b98fad44f?width=466",
-    },
-  ];
+  const [featuredProducts, setFeaturedProducts] = useState<Array<{ id: string; name: string; price: number; image: string }>>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadFeatured = async () => {
+      try {
+        const data = await productsAPI.getAll({ featured: true });
+        setFeaturedProducts(
+          data.map((p: any) => ({
+            id: p.id.toString(),
+            name: p.name,
+            price: p.price,
+            image: p.image || "https://via.placeholder.com/300",
+            video_url: p.video_url || null,
+          }))
+        );
+      } catch (e) {
+        console.error("Error cargando productos destacados", e);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadFeatured();
+  }, []);
 
   return (
     <Layout>
@@ -73,11 +76,17 @@ export default function Index() {
         <h2 className="text-artra-navy text-[28px] font-bold mb-12">
           Productos Destacados
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center max-w-[1100px] mx-auto">
-          {featuredProducts.map((product) => (
-            <ProductCard key={product.id} {...product} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="text-center text-gray-600">Cargando destacados...</div>
+        ) : featuredProducts.length === 0 ? (
+          <div className="text-center text-gray-600">No hay productos destacados</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center max-w-[1100px] mx-auto">
+            {featuredProducts.map((product) => (
+              <ProductCard key={product.id} {...product} />
+            ))}
+          </div>
+        )}
       </section>
     </Layout>
   );
