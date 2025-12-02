@@ -4,16 +4,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { QRCodeSVG } from "qrcode.react";
 
 interface QRModalProps {
   isOpen: boolean;
   onClose: () => void;
-  qrCodeUrl?: string;
+  videoUrl?: string;
 }
 
-export default function QRModal({ isOpen, onClose, qrCodeUrl }: QRModalProps) {
-  // Default QR code placeholder image
-  const defaultQR = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://artra.com/historia-artesania";
+export default function QRModal({ isOpen, onClose, videoUrl }: QRModalProps) {
   
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -25,11 +24,15 @@ export default function QRModal({ isOpen, onClose, qrCodeUrl }: QRModalProps) {
         </DialogHeader>
         <div className="flex items-center justify-center p-6">
           <div className="bg-white p-4 rounded-lg border-2 border-artra-blue">
-            <img
-              src={qrCodeUrl || defaultQR}
-              alt="Código QR de la artesanía"
-              className="w-64 h-64 object-contain"
-            />
+            {videoUrl ? (
+              <QRCodeSVG value={videoUrl} size={256} level="H" />
+            ) : (
+              <div className="w-64 h-64 flex items-center justify-center">
+                <p className="text-gray-600 text-center text-sm">
+                  Este producto no tiene video asociado.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </DialogContent>
