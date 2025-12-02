@@ -3,6 +3,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import os from "os";
+import { v2 as cloudinary } from "cloudinary";
 
 // Configurable storage mode; default to disk to persist uploaded images
 const storageMode = (process.env.UPLOAD_STORAGE || "disk").toLowerCase();
@@ -39,6 +40,42 @@ export const handleUpload = [
     if (!req.file) {
       return res.status(400).json({ error: "No se recibió archivo" });
     }
+    const useCloudinary = Boolean(process.env.CLOUDINARY_URL || (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET));
+
+    // If Cloudinary is configured, upload there for persistent storage in production
+    if (useCloudinary) {
+      // Configure if explicit credentials are present
+      if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+        cloudinary.config({
+          cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+          api_key: process.env.CLOUDINARY_API_KEY,
+          api_secret: process.env.CLOUDINARY_API_SECRET,
+        });
+      }
+
+      const folder = "artrados/products";
+      const filename = (req.file.originalname || "image").replace(/[^a-z0-9-_.]/gi, "_");
+
+      const uploadBuffer = async () => {
+        const base64 = req.file.buffer.toString("base64");
+        const dataUrl = `data:${req.file.mimetype};base64,${base64}`;
+        return cloudinary.uploader.upload(dataUrl, { folder, public_id: filename, overwrite: true });
+      };
+
+      const uploadFilePath = async (filePath: string) => cloudinary.uploader.upload(filePath, { folder, public_id: filename, overwrite: true });
+
+      const doUpload = storageMode === "memory" && req.file.buffer ? uploadBuffer : uploadFilePath.bind(null, req.file.path);
+
+      return doUpload()
+        .then((result) => {
+          return res.json({ url: result.secure_url, public_id: result.public_id });
+        })
+        .catch((err) => {
+          console.error("Cloudinary upload error", err);
+          return res.status(500).json({ error: "Error subiendo imagen" });
+        });
+    }
+
     if (storageMode === "memory" && req.file.buffer) {
       const mime = req.file.mimetype || "image/png";
       const base64 = req.file.buffer.toString("base64");
