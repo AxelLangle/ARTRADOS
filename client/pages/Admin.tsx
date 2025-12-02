@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { productsAPI, categoriesAPI } from '../services/api';
 import { Product, Category } from '../types';
-import QRCode from 'qrcode.react';
 import { Plus, Edit, Trash2, QrCode } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
+import DragAndDropInput from '../components/DragAndDropInput';
 
 
 
@@ -29,6 +30,7 @@ export default function Admin() {
     video_url: '',
     featured: false
   });
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
     // Verificar si el usuario es admin
@@ -76,20 +78,34 @@ export default function Admin() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // Normalizar la ruta de imagen: permitir URL absolutas o rutas dentro de /images
+      const normalizeImagePath = (value: string) => {
+        const trimmed = (value || '').trim();
+        if (!trimmed) return '';
+        // Si es un data URL (imagen subida), conservar tal cual
+        if (trimmed.startsWith('data:image/')) return trimmed;
+        const lower = trimmed.toLowerCase();
+        if (lower.startsWith('http://') || lower.startsWith('https://')) return trimmed;
+        // Si ya es una ruta absoluta del sitio
+        if (trimmed.startsWith('/')) return trimmed;
+        // Extraer el nombre del archivo de rutas locales tipo C:\path\file.png o path/file.png
+        const parts = trimmed.split(/\\|\//g);
+        const filename = parts[parts.length - 1];
+        return `/images/${filename}`;
+      };
+
+      const payload = {
+        ...formData,
+        image: normalizeImagePath(formData.image),
+        video_url: formData.video_url || null,
+      };
+
       if (editingProduct) {
         // La API de update es más flexible y acepta el objeto completo
-        await productsAPI.update(editingProduct.id, {
-          ...formData,
-          image: formData.image, // Asegurar que la clave es 'image'
-          video_url: formData.video_url || null,
-        });
+        await productsAPI.update(editingProduct.id, payload);
       } else {
         // Usar la nueva función addProduct
-        await productsAPI.addProduct({
-          ...formData,
-          image: formData.image, // Asegurar que la clave es 'image'
-          video_url: formData.video_url || null,
-        });
+        await productsAPI.addProduct(payload);
       }
       await loadData();
       resetForm();
@@ -122,6 +138,7 @@ export default function Admin() {
       video_url: product.video_url || '', // Asegurar que no es null para el input
       featured: product.featured
     });
+    setImagePreview(product.image || null);
     setShowForm(true);
   };
 
@@ -136,6 +153,7 @@ export default function Admin() {
       video_url: '',
       featured: false
     });
+    setImagePreview(null);
     setEditingProduct(null);
     setShowForm(false);
   };
@@ -149,6 +167,12 @@ export default function Admin() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between mb-8">
           <h1 className="heading-1">Panel de Administración</h1>
+          <button
+            onClick={() => navigate('/')}
+            className="btn-secondary flex items-center gap-2"
+          >
+            Volver al Inicio
+          </button>
           <button
             onClick={() => setShowForm(!showForm)}
             className="btn-primary flex items-center gap-2"
@@ -224,14 +248,16 @@ export default function Admin() {
                 />
               </div>
 
-              <div>
-	                <label className="block body-base font-semibold mb-2">Ruta de Imagen (e.g., /images/MI_IMAGEN.png)</label>
-	                <input
-	                  type="text" // Cambiado a text ya que es una ruta local, no una URL externa
-	                  value={formData.image}
-	                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-	                  className="input-field w-full"
-	                />
+              <div className="md:col-span-2">
+                <label className="block body-base font-semibold mb-2">Imagen del producto</label>
+                <DragAndDropInput
+                  value={formData.image}
+                  onChange={(val) => {
+                    setFormData({ ...formData, image: val });
+                    setImagePreview(val || null);
+                  }}
+                  productName={formData.name}
+                />
               </div>
 
               <div>
@@ -303,19 +329,20 @@ export default function Admin() {
                   </td>
                   <td className="px-4 py-3 text-right">${product.price.toFixed(2)}</td>
                   <td className="px-4 py-3 text-right">{product.stock}</td>
-	                  <td className="px-4 py-3 text-center">
-	                    {product.video_url && (
-	                      <a 
-	                        href={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(product.video_url)}`} 
-	                        target="_blank" 
-	                        rel="noopener noreferrer"
-	                        className="text-blue hover:text-navy"
-	                        title="Ver QR del video"
-	                      >
-	                        <QrCode className="w-5 h-5 mx-auto" />
-	                      </a>
-	                    )}
-	                  </td>
+                    <td className="px-4 py-3 text-center">
+                      {product.video_url ? (
+                        <div className="inline-flex items-center justify-center">
+                          <QRCodeSVG
+                            value={product.video_url}
+                            size={72}
+                            level="M"
+                            title="QR del video"
+                          />
+                        </div>
+                      ) : (
+                        <span className="text-gray-400">—</span>
+                      )}
+                    </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-center gap-2">
                       <button
