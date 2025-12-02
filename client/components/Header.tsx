@@ -1,4 +1,5 @@
 // client/components/Header.tsx
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, Heart, ShoppingCart } from "lucide-react";
 import UserMenu from "./UserMenu";
@@ -14,8 +15,9 @@ import {
 } from "@/components/styles/headerClasses";
 
 export default function Header() {
-	  const { items: cartItems } = useCart();
-	  const { items: wishlistItems } = useWishlist();
+    const { items: cartItems } = useCart();
+    const { defaultList } = useWishlist();
+    const wishlistCount = defaultList?.items?.length ?? 0;
 	  const [searchQuery, setSearchQuery] = useState(''); // Añadir estado para la búsqueda
 	
 	  // Función de búsqueda simulada (solo para evitar errores, la funcionalidad real
@@ -84,8 +86,8 @@ export default function Header() {
           </Link>
         </nav>
 
-	        {/* Search Bar e Iconos (agrupados a la derecha) */}
-	        <div className="flex items-center gap-2 md:gap-4 flex-1 justify-center"> {/* Flex-1 y justify-center */}
+          {/* Search Bar e Iconos (agrupados a la derecha) */}
+          <div className="flex items-center gap-2 md:gap-4 flex-1 justify-center ml-8"> {/* Añadido ml-8 para separar de la navegación */}
 	          {/* Search Bar */}
 	          <form onSubmit={handleSearch} className="hidden sm:flex flex-1">
 	            <div className="relative w-full"> {/* Añadido w-full */}
@@ -106,9 +108,9 @@ export default function Header() {
             {/* Reducido tamaño de botones/iconos */}
             <Link to="/favoritos" className={ICON_BUTTON}>
               <Heart className={ICON_NAVY_24} />
-              {wishlistItems.length > 0 && (
+              {wishlistCount > 0 && (
                 <span className={BADGE_COUNT}>
-                  {wishlistItems.length}
+                  {wishlistCount}
                 </span>
               )}
             </Link>
