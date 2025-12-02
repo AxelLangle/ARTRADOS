@@ -1,6 +1,7 @@
 import path from "path";
 import { createServer } from "./index";
 import * as express from "express";
+import * as expressModule from "express";
 
 const app = createServer();
 const port = process.env.PORT || 3000;
@@ -8,9 +9,12 @@ const port = process.env.PORT || 3000;
 // In production, serve the built SPA files
 const __dirname = import.meta.dirname;
 const distPath = path.join(__dirname, "../spa");
+const publicPath = path.join(__dirname, "../public");
 
 // Serve static files
 app.use(express.static(distPath));
+// Serve public assets (e.g., uploaded images)
+app.use(expressModule.static(publicPath));
 
 // Handle React Router - serve index.html for all non-API routes
 app.get("*", (req, res) => {
