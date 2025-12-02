@@ -3,18 +3,10 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import os from "os";
-import { v2 as cloudinary } from "cloudinary";
+// import { v2 as cloudinary } from "cloudinary";
 
-// Detect serverless environment (Netlify, Vercel, AWS Lambda)
-const isServerless = Boolean(
-  process.env.NETLIFY || 
-  process.env.VERCEL || 
-  process.env.AWS_LAMBDA_FUNCTION_NAME ||
-  process.env.LAMBDA_TASK_ROOT
-);
-
-// Use memory storage in serverless, disk otherwise
-const storageMode = isServerless ? "memory" : (process.env.UPLOAD_STORAGE || "disk").toLowerCase();
+// Forcibly use disk storage even in production as requested
+const storageMode = (process.env.UPLOAD_STORAGE || "disk").toLowerCase();
 
 let storage: multer.StorageEngine;
 if (storageMode === "memory") {
@@ -48,71 +40,10 @@ export const handleUpload = [
     if (!req.file) {
       return res.status(400).json({ error: "No se recibió archivo" });
     }
-    const useCloudinary = Boolean(
-      process.env.CLOUDINARY_URL || 
-      (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET)
-    );
+    // Cloudinary integration temporarily disabled per request.
+    // To re-enable, restore the Cloudinary block and set env vars.
 
-    // In serverless, Cloudinary is required; in local dev, it's optional
-    if (isServerless && !useCloudinary) {
-      console.error("Cloudinary not configured in serverless environment");
-      return res.status(500).json({ 
-        error: "Cloudinary configuration required in production",
-        hint: "Set CLOUDINARY_URL or CLOUDINARY_CLOUD_NAME/API_KEY/API_SECRET in Netlify environment variables"
-      });
-    }
-
-    // If Cloudinary is configured, upload there for persistent storage
-    if (useCloudinary) {
-      // Configure if explicit credentials are present
-      if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
-        cloudinary.config({
-          cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-          api_key: process.env.CLOUDINARY_API_KEY,
-          api_secret: process.env.CLOUDINARY_API_SECRET,
-        });
-      }
-
-      const folder = "artrados/products";
-      const timestamp = Date.now();
-      const originalName = path.parse(req.file.originalname).name.replace(/[^a-z0-9-_]/gi, "_");
-      const filename = `${originalName}-${timestamp}`;
-
-      try {
-        let result;
-        if (storageMode === "memory" && req.file.buffer) {
-          // Upload from buffer (serverless)
-          const base64 = req.file.buffer.toString("base64");
-          const dataUrl = `data:${req.file.mimetype};base64,${base64}`;
-          result = await cloudinary.uploader.upload(dataUrl, { 
-            folder, 
-            public_id: filename, 
-            resource_type: "auto"
-          });
-        } else {
-          // Upload from file path (local dev)
-          result = await cloudinary.uploader.upload(req.file.path, { 
-            folder, 
-            public_id: filename,
-            resource_type: "auto"
-          });
-        }
-        return res.json({ url: result.secure_url, public_id: result.public_id });
-      } catch (err: any) {
-        console.error("Cloudinary upload error:", err);
-        return res.status(500).json({ 
-          error: "Error subiendo imagen a Cloudinary",
-          details: err.message || "Unknown error"
-        });
-      }
-    }
-
-    if (storageMode === "memory" && req.file.buffer) {
-      const mime = req.file.mimetype || "image/png";
-      const base64 = req.file.buffer.toString("base64");
-      const dataUrl = `data:${mime};base64,${base64}`;
-      return res.json({ dataUrl });
-    }
+    // Always use disk path response
     const relPath = `/images/${req.file.filename}`;
     // Construct absolute URL when possible
     const proto = (req.headers["x-forwarded-proto"] as string) || req.protocol;
