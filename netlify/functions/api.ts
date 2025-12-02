@@ -1,11 +1,9 @@
 import serverless from "serverless-http";
-
 import { createServer } from "../../server";
 
-export const handler = serverless(createServer(), {
+const app = createServer();
+
+export const handler = serverless(app, {
+  basePath: "/api",
   binary: true,
-  request(request: any, _event: any, _context: any) {
-    // Ensure proper handling of file uploads and multipart form data
-    return request;
-  },
 });
