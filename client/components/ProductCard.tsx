@@ -6,10 +6,11 @@ import { useWishlist } from "@/contexts/WishlistContext";
 import QRModal from "@/components/QRModal";
 
 interface ProductCardProps {
-  id: string;
+  id: string | number;
   name: string;
   price: number;
   image: string;
+  video_url?: string | null;
 }
 
 export default function ProductCard({
@@ -17,21 +18,24 @@ export default function ProductCard({
   name,
   price,
   image,
+  video_url,
 }: ProductCardProps) {
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-  const inWishlist = isInWishlist(id);
+  const productId = Number(id);
+  const inWishlist = isInWishlist(productId);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
 
   const handleAddToCart = () => {
-    addToCart({ id, name, price, image });
+    addToCart({ id: String(productId), name, price, image });
   };
 
   const handleToggleWishlist = () => {
-    if (inWishlist) {
-      removeFromWishlist(id);
+    const current = isInWishlist(productId);
+    if (current) {
+      removeFromWishlist(productId);
     } else {
-      addToWishlist({ id, name, price, image });
+      addToWishlist(productId);
     }
   };
 
@@ -92,6 +96,7 @@ export default function ProductCard({
       <QRModal 
         isOpen={isQRModalOpen} 
         onClose={() => setIsQRModalOpen(false)}
+        videoUrl={video_url || undefined}
       />
     </div>
   );
