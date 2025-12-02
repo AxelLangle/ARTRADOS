@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { productsAPI } from "../services/api";
 import { Product } from "../types";
-import QRCode from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
@@ -167,18 +167,18 @@ export default function ProductDetail() {
                 Escanea este código QR y descubre más sobre el proceso de
                 elaboración de esta pieza y también del artesano que la creó.
               </p>
-	              <div className="w-[250px] h-[250px] bg-white rounded-2xl p-4 flex items-center justify-center">
-	                {product.video_url ? (
-	                  <QRCode 
-	                    value={product.video_url} 
-	                    size={200} 
-	                    level="H" 
-	                    includeMargin={true}
-	                  />
-	                ) : (
-	                  <p className="text-gray-500 text-center">No hay video asociado para generar QR.</p>
-	                )}
-	              </div>
+                <div className="w-[250px] h-[250px] bg-white rounded-2xl p-4 flex items-center justify-center">
+                  {product.video_url ? (
+                    <QRCodeSVG 
+                      value={product.video_url} 
+                      size={200} 
+                      level="H" 
+                      includeMargin={true}
+                    />
+                  ) : (
+                    <p className="text-gray-500 text-center">No hay video asociado para generar QR.</p>
+                  )}
+                </div>
             </div>
           </div>
         </div>
