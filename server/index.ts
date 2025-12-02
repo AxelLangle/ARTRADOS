@@ -9,6 +9,7 @@ import productRoutes from "./routes/products";
 import categoryRoutes from "./routes/categories";
 import wishlistRoutes from "./routes/wishlist";
 import contactRoutes from "./routes/contact";
+import { handleUpload } from "./routes/upload";
 
 export function createServer() {
   const app = express();
@@ -37,6 +38,8 @@ export function createServer() {
   app.use("/api/categories", categoryRoutes);
   app.use("/api/wishlist", wishlistRoutes);
   app.use("/api/contact", contactRoutes);
+  // Upload endpoint
+  app.post("/api/upload", handleUpload);
 
   // Health check
   app.get("/api/health", (_req, res) => {
