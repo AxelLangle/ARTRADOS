@@ -63,6 +63,34 @@ export default function QuienEsArtra() {
               </p>
             </div>
 
+            <div className="mt-12">
+              <h2 className="text-artra-navy text-[32px] font-bold mb-6">
+                Valores de ARTRA
+              </h2>
+              <p className="text-black text-lg leading-relaxed">
+                <ul className="list-disc pl-6 space-y-4">
+                  <li>
+                    <strong>Responsabilidad social:</strong> Compromiso con el bienestar de las comunidades artesanas, promoviendo condiciones de trabajo justas y relaciones comerciales equitativas.
+                  </li>
+                  <li>
+                    <strong>Respeto cultural:</strong> Valoración y preservación de las tradiciones, técnicas y expresiones artesanales como parte fundamental de la identidad mexicana.
+                  </li>
+                  <li>
+                    <strong>Sostenibilidad:</strong> Uso responsable de los recursos naturales y adopción de prácticas que reduzcan el impacto ambiental en todas las operaciones.
+                  </li>
+                  <li>
+                    <strong>Transparencia:</strong> Actuación ética y clara en los procesos comerciales, precios, comisiones y comunicación con artesanos y consumidores.
+                  </li>
+                  <li>
+                    <strong>Innovación:</strong> Aplicación de la tecnología como herramienta para modernizar la comercialización artesanal sin perder su esencia cultural.
+                  </li>
+                  <li>
+                    <strong>Calidad y autenticidad:</strong> Compromiso con la oferta de productos artesanales auténticos, elaborados a mano y con altos estándares de calidad.
+                  </li>
+                </ul>
+              </p>
+            </div>
+
             <div className="mt-12 pt-8 border-t border-gray-200">
               <Link
                 to="/"

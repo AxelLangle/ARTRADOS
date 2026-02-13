@@ -40,7 +40,7 @@ export default function Index() {
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center px-4">
           <h1 className="text-white text-[40px] font-black text-center mb-2 leading-tight">
-            Descrube la belleza de lo hecho a mano
+            Descubre la belleza de lo hecho a mano
           </h1>
           <p className="text-white text-xl font-medium text-center max-w-[800px] mb-8">
             ARTRA es un mercado en linea que conecta a artesanos talentosos con
