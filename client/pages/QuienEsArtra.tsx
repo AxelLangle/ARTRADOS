@@ -91,6 +91,27 @@ export default function QuienEsArtra() {
               </p>
             </div>
 
+            <div className="mt-12">
+              <h2 className="text-artra-navy text-[32px] font-bold mb-6">
+                Nuestra Sede
+              </h2>
+              <div className="w-full h-[450px] rounded-xl overflow-hidden shadow-lg border border-gray-200">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d853.4039335068992!2d-98.97887631953121!3d19.714521998777016!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTnCsDQyJzUyLjMiTiA5OMKwNTgnNDEuNiJX!5e1!3m2!1ses-419!2smx!4v1771028228781!5m2!1ses-419!2smx"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen={true}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Ubicación de ARTRA"
+                ></iframe>
+              </div>
+              <p className="mt-4 text-center text-gray-600">
+                Visítanos en nuestra sede principal.
+              </p>
+            </div>
+
             <div className="mt-12 pt-8 border-t border-gray-200">
               <Link
                 to="/"

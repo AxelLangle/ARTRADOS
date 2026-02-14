@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Facebook, Instagram, Mail } from "lucide-react";
+import { Facebook, Instagram, Mail, MapPin } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -27,7 +27,7 @@ export default function Footer() {
               className="text-artra-lighter-blue text-base font-semibold hover:text-white transition-colors"
             >
               Términos de uso
-            </Link>           
+            </Link>
             <Link
               to="/condicionesEnvio"
               className="text-artra-lighter-blue text-base font-semibold hover:text-white transition-colors"
@@ -86,6 +86,16 @@ export default function Footer() {
               aria-label="Email"
             >
               <Mail className="w-6 h-6" />
+            </a>
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=19.714522,-98.978876"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-artra-lighter-blue hover:text-white transition-colors"
+              aria-label="Ubicación"
+              title="Ver ubicación en Google Maps"
+            >
+              <MapPin className="w-6 h-6" />
             </a>
           </div>
         </div>
